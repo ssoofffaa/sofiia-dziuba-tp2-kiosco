@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="KIOSCO - arma tu look completo. Moda por ocasión, por tu tipo de imagen y tu cromotipo. Cada prenda de su tienda, un solo pedido.">
+  <title>KIOSCO - Arma tu look completo</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <!-- Bootstrap 5 (CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- CSS propio (unico, sin estilos inline). Tipografias locales en /tipografias declaradas con @font-face dentro de estilos.css -->
+  <link href="css/estilos.css" rel="stylesheet">
+</head>
+<body>
+  <div class="k-grano" aria-hidden="true"></div>
+
+  <!-- ====================================================================
+       MASTHEAD + NAVBAR (componente Bootstrap) - navegacion comun
+       ==================================================================== -->
+  <header class="k-masthead">
+    <nav class="navbar navbar-expand-lg" aria-label="Navegación principal">
+      <div class="k-contenedor k-nav d-flex align-items-center flex-wrap flex-lg-nowrap w-100 gap-2">
+        <!-- Movil: burger abre offcanvas a pantalla completa. Oculto en >=lg -->
+        <button class="k-iconbtn order-0 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuPrincipal" aria-controls="menuPrincipal" aria-label="Abrir menú">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+
+        <!-- Movil: logo centrado / Desktop: logo a la izquierda -->
+        <a class="k-marca order-1 mx-auto mx-lg-0 me-lg-4" href="index.html" aria-label="KIOSCO - inicio">
+          KIOSCO<span class="k-marca__punto">.</span>
+        </a>
+
+        <!-- Menu: offcanvas en <lg, inline en >=lg (Bootstrap responsive offcanvas) -->
+        <div class="offcanvas-lg offcanvas-start order-3 order-lg-2 w-100 w-lg-auto me-lg-auto k-panel k-menu-panel" tabindex="-1" id="menuPrincipal" aria-labelledby="menuPrincipalTitulo">
+          <div class="offcanvas-header d-lg-none">
+            <a class="k-marca" href="index.html" aria-label="KIOSCO - inicio" id="menuPrincipalTitulo">
+              KIOSCO<span class="k-marca__punto">.</span>
+            </a>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#menuPrincipal" aria-label="Cerrar menú"></button>
+          </div>
+          <div class="offcanvas-body">
+            <ul class="navbar-nav align-items-lg-center gap-lg-4">
+              <li class="nav-item"><a class="k-nav-link" href="index.html" aria-current="page">Inicio</a></li>
+              <li class="nav-item"><a class="k-nav-link" href="secciones/productos.html">Catálogo</a></li>
+              <li class="nav-item"><a class="k-nav-link" href="#tu-tipo">Tu tipo</a></li>
+              <li class="nav-item"><a class="k-nav-link" href="#preguntas">Ayuda</a></li>
+            </ul>
+            <!-- Extra solo movil: tema + contacto -->
+            <div class="k-menu-extra d-lg-none">
+              <button class="k-btn k-menu-tema" type="button" data-toggle-tema aria-pressed="false" aria-label="Cambiar tema claro u oscuro">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+                Tema claro / oscuro
+              </button>
+              <p class="k-mono k-apagado mt-3 mb-0">Contacto: hola@kiosco.moda &middot; +34 600 000 000</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Iconos a la derecha: tema (solo desktop), cuenta y cesta -->
+        <div class="k-nav-iconos d-flex align-items-center gap-2 order-2 order-lg-3">
+          <button class="k-iconbtn d-none d-lg-inline-grid" type="button" data-toggle-tema aria-pressed="false" aria-label="Cambiar tema claro u oscuro" title="Tema">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          </button>
+          <button class="k-iconbtn" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelCuenta" aria-controls="panelCuenta" aria-label="Mi cuenta y mis tableros" title="Mi cuenta">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+          </button>
+          <button class="k-iconbtn k-iconbtn--cesta" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelCesta" aria-controls="panelCesta" aria-label="Cesta" title="Cesta">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span class="k-cesta-badge" data-cesta-contador hidden>0</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Barra de busqueda + filtros -->
+    <div class="k-buscador">
+      <div class="k-contenedor d-flex align-items-center gap-2">
+        <form class="k-buscador__form" role="search" action="secciones/productos.html">
+          <svg class="k-buscador__lupa" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input class="k-buscador__input" type="search" name="q" placeholder="Busca un look, una prenda, un tipo…" aria-label="Buscar">
+        </form>
+        <button class="k-btn k-buscador__filtros" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelFiltros" aria-controls="panelFiltros">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 5h18M6 12h12M10 19h4"/></svg>
+          Filtros
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==================================================================
+         BLOQUE 1 - PORTADA: collage de looks
+         ================================================================== -->
+    <section class="k-portada k-collage" aria-labelledby="portada-titulo">
+      <div class="k-contenedor">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-5 order-2 order-lg-1 k-reveal">
+            <h1 class="k-hero" id="portada-titulo">
+              Armar<br>
+              <span class="k-contorno">tu</span> look<br>
+              <span class="k-acento">completo</span>
+            </h1>
+            <p class="k-desc k-medida mb-4">
+              El nuevo modo de comprar moda: <strong>creado pensando en tu tipaje</strong>. Guarda y pide al instante lo que de verdad te favorece, todo en un mismo sitio.
+            </p>
+            <div class="d-flex flex-wrap gap-3">
+              <a class="k-btn k-btn--rojo" href="secciones/productos.html">Ver el catálogo</a>
+              <a class="k-btn" href="#tu-tipo">Descubrir mi tipo</a>
+            </div>
+          </div>
+          <div class="col-lg-7 order-1 order-lg-2 k-reveal">
+            <div class="k-portada__collage" aria-label="Composición de prendas para armar tu look">
+              <figure class="k-scrap k-scrap--1"><img class="img-fluid" src="multimedia/armar-1.jpg" alt="Pieza para armar tu look"></figure>
+              <figure class="k-scrap k-scrap--2"><img class="img-fluid" src="multimedia/armar-2.jpg" alt="Pieza para armar tu look"></figure>
+              <figure class="k-scrap k-scrap--3"><img class="img-fluid" src="multimedia/armar-3.jpg" alt="Pieza para armar tu look"></figure>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         BLOQUE 2 - CÓMO FUNCIONA: foto con marcadores animados
+         ================================================================== -->
+    <section class="k-contenedor k-sec" aria-labelledby="comofunciona-titulo">
+      <div class="row align-items-center g-4 g-lg-5">
+        <div class="col-lg-5 order-2 order-lg-1 k-reveal">
+          <h2 class="k-h2" id="comofunciona-titulo">Looks completos que te quedan</h2>
+          <p class="k-desc k-medida">
+            Full looks que <strong>encajan con tu apariencia</strong>. Llévatelos <strong>por piezas o enteros</strong>, sin importar la marca.
+          </p>
+        </div>
+        <div class="col-lg-7 order-1 order-lg-2">
+          <figure class="k-demo k-reveal" aria-label="Look con prendas marcadas">
+            <img class="img-fluid w-100" src="multimedia/rasgos.jpg" alt="Dos looks completos con prendas señaladas por marcadores">
+            <!-- Marcadores: dot + popover (nombre, precio, icono cesta) -->
+            <div class="k-demo__mk k-demo__mk--1">
+              <button class="k-demo__pt" type="button" aria-label="Abrigo de lana roja, 150.000 pesos"></button>
+              <span class="k-demo__pop"><span>Abrigo de lana</span><b>$150.000</b>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              </span>
+            </div>
+            <div class="k-demo__mk k-demo__mk--2">
+              <button class="k-demo__pt" type="button" aria-label="Vestido lencero rosa, 85.000 pesos"></button>
+              <span class="k-demo__pop"><span>Vestido lencero</span><b>$85.000</b>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              </span>
+            </div>
+            <div class="k-demo__mk k-demo__mk--3">
+              <button class="k-demo__pt" type="button" aria-label="Chaqueta de pelo marrón, 130.000 pesos"></button>
+              <span class="k-demo__pop"><span>Chaqueta de pelo</span><b>$130.000</b>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              </span>
+            </div>
+            <div class="k-demo__mk k-demo__mk--4">
+              <button class="k-demo__pt" type="button" aria-label="Vaqueros anchos, 90.000 pesos"></button>
+              <span class="k-demo__pop"><span>Vaqueros anchos</span><b>$90.000</b>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              </span>
+            </div>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         BLOQUE 3 - TIPAJES: foto con pines de rasgos (espejo del bloque 2)
+         Reutiliza la mecánica .k-demo, pero los popovers describen rasgos
+         de la cara, no prendas ni precios.
+         ================================================================== -->
+    <section class="k-contenedor k-sec" aria-labelledby="tipajes-titulo">
+      <div class="row align-items-center g-4 g-lg-5">
+        <div class="col-lg-5 order-2 order-lg-2 k-reveal">
+          <h2 class="k-h2" id="tipajes-titulo">Elegí tu tipaje</h2>
+          <p class="k-desc k-medida">
+            Componemos looks completos para tu tipo de imagen: leemos <strong>los rasgos de tu cara</strong> (mirada, nariz, labios, cabello) y <strong>las proporciones de tu figura</strong>, y elegimos solo lo que <strong>de verdad te favorece</strong>. Esta foto, por ejemplo, encaja en un tipaje <strong>Natural</strong>.
+          </p>
+        </div>
+        <div class="col-lg-7 order-1 order-lg-1">
+          <figure class="k-demo k-demo--rasgos k-reveal" aria-label="Rasgos del tipaje Natural señalados sobre una foto">
+            <img class="img-fluid w-100" src="multimedia/encajan.jpg" alt="Rostro con rasgos señalados como ejemplo del análisis de tipaje Natural">
+            <div class="k-demo__mk k-demo__mk--1">
+              <button class="k-demo__pt" type="button" aria-label="Rasgo: mirada serena"></button>
+              <span class="k-demo__pop"><span>Mirada serena</span></span>
+            </div>
+            <div class="k-demo__mk k-demo__mk--2">
+              <button class="k-demo__pt" type="button" aria-label="Rasgo: nariz suave"></button>
+              <span class="k-demo__pop"><span>Nariz suave</span></span>
+            </div>
+            <div class="k-demo__mk k-demo__mk--3">
+              <button class="k-demo__pt" type="button" aria-label="Rasgo: labios carnosos"></button>
+              <span class="k-demo__pop"><span>Labios carnosos</span></span>
+            </div>
+            <div class="k-demo__mk k-demo__mk--4">
+              <button class="k-demo__pt" type="button" aria-label="Rasgo: cabello ondulado"></button>
+              <span class="k-demo__pop"><span>Cabello ondulado</span></span>
+            </div>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         TICKER promo - reubicado justo antes de la galería de looks
+         ================================================================== -->
+    <div class="k-ticker k-reveal" aria-hidden="true">
+      <div class="k-ticker__pista k-mono">
+        <span class="k-acento">Arma tu look completo</span><span>*</span>
+        <span>Una prenda de cada tienda, un solo pedido</span><span>*</span>
+        <span>Descubre tu tipo y vístelo</span><span>*</span>
+        <span>Envío en 48h</span><span>*</span>
+        <span class="k-acento">Arma tu look completo</span><span>*</span>
+        <span>Una prenda de cada tienda, un solo pedido</span><span>*</span>
+        <span>Descubre tu tipo y vístelo</span><span>*</span>
+        <span>Envío en 48h</span><span>*</span>
+      </div>
+    </div>
+
+    <!-- ==================================================================
+         BLOQUE 4 - GALERIA collage (6 looks, inclinados como el referente)
+         Acciones (like/guardar/cesta) las inyecta js/tienda.js.
+         ================================================================== -->
+    <section class="k-bloque-negro k-sec" aria-labelledby="galeria-titulo">
+      <div class="k-contenedor">
+      <header class="text-center k-cab k-reveal">
+        <h2 class="k-h2" id="galeria-titulo">Looks de la edición</h2>
+      </header>
+
+      <div class="k-board" data-galeria>
+        <article class="k-card k-look k-reveal" data-look="look-05" data-nombre="Cuero Urbano" data-precio="1240000" data-prendas="6" data-img="multimedia/look-05-a.jpg">
+          <div class="k-card__media k-card__media--swap">
+            <img class="img-fluid k-card__media-a" src="multimedia/look-05-a.jpg" alt="Look Cuero Urbano: chaqueta de cuero ceñida con cinturón, shorts y botas altas">
+            <img class="img-fluid k-card__media-b" src="multimedia/look-05-b.jpg" alt="" aria-hidden="true">
+          </div>
+          <div class="k-look__info">
+            <p class="k-card__precio mb-2"><span class="k-card__precio-num">$1.240.000</span><span class="k-card__precio-meta">6 prendas</span></p>
+            <div class="k-tags">
+              <span class="k-tag">Dramático</span>
+              <span class="k-tag">Invierno</span>
+              <span class="k-tag">Triángulo inv.</span>
+              <span class="k-tag">Noche</span>
+            </div>
+            <p class="k-card__compo k-mono">Chaqueta de cuero &middot; shorts &middot; botas altas &middot; bolso metalizado &middot; gafas &middot; pendientes</p>
+          </div>
+        </article>
+
+        <article class="k-card k-look k-reveal" data-look="look-02" data-nombre="Sastre Verde Salvia" data-precio="720000" data-prendas="5" data-img="multimedia/look-02-a.jpg">
+          <div class="k-card__media k-card__media--swap">
+            <img class="img-fluid k-card__media-a" src="multimedia/look-02-a.jpg" alt="Look Sastre Verde Salvia: chaqueta oversize oliva, camisa con corbata y medias altas">
+            <img class="img-fluid k-card__media-b" src="multimedia/look-02-b.jpg" alt="" aria-hidden="true">
+          </div>
+          <div class="k-look__info">
+            <p class="k-card__precio mb-2"><span class="k-card__precio-num">$720.000</span><span class="k-card__precio-meta">5 prendas</span></p>
+            <div class="k-tags">
+              <span class="k-tag">Clásico</span>
+              <span class="k-tag">Otoño</span>
+              <span class="k-tag">Rectángulo</span>
+              <span class="k-tag">Trabajo</span>
+            </div>
+            <p class="k-card__compo k-mono">Chaqueta oversize &middot; camisa blanca &middot; corbata &middot; medias altas &middot; mary jane</p>
+          </div>
+        </article>
+
+        <article class="k-card k-look k-reveal" data-look="look-03" data-nombre="Tweed Salvia" data-precio="760000" data-prendas="6" data-img="multimedia/look-03-a.jpg">
+          <div class="k-card__media k-card__media--swap">
+            <img class="img-fluid k-card__media-a" src="multimedia/look-03-a.jpg" alt="Look Tweed Salvia: cardigan verde, top canalé marrón y falda tweed crema">
+            <img class="img-fluid k-card__media-b" src="multimedia/look-03-b.jpg" alt="" aria-hidden="true">
+          </div>
+          <div class="k-look__info">
+            <p class="k-card__precio mb-2"><span class="k-card__precio-num">$760.000</span><span class="k-card__precio-meta">6 prendas</span></p>
+            <div class="k-tags">
+              <span class="k-tag">Clásico</span>
+              <span class="k-tag">Primavera</span>
+              <span class="k-tag">Reloj de arena</span>
+              <span class="k-tag">Día</span>
+            </div>
+            <p class="k-card__compo k-mono">Cardigan corto &middot; top canalé &middot; falda de tweed &middot; medias &middot; sandalias &middot; bolso mini</p>
+          </div>
+        </article>
+
+        <article class="k-card k-look k-reveal" data-look="look-04" data-nombre="Pelo y Denim" data-precio="895000" data-prendas="6" data-img="multimedia/look-04-a.jpg">
+          <div class="k-card__media k-card__media--swap">
+            <img class="img-fluid k-card__media-a" src="multimedia/look-04-a.jpg" alt="Look Pelo y Denim: chaqueta de pelo marrón, vaqueros anchos y botines chunky">
+            <img class="img-fluid k-card__media-b" src="multimedia/look-04-b.jpg" alt="" aria-hidden="true">
+          </div>
+          <div class="k-look__info">
+            <p class="k-card__precio mb-2"><span class="k-card__precio-num">$895.000</span><span class="k-card__precio-meta">6 prendas</span></p>
+            <div class="k-tags">
+              <span class="k-tag">Natural</span>
+              <span class="k-tag">Otoño</span>
+              <span class="k-tag">Rectángulo</span>
+              <span class="k-tag">Casual</span>
+            </div>
+            <p class="k-card__compo k-mono">Chaqueta de pelo &middot; vaqueros anchos &middot; cinturón &middot; botines chunky &middot; bolso &middot; gafas</p>
+          </div>
+        </article>
+
+        <article class="k-card k-look k-reveal" data-look="look-01" data-nombre="Noir Estructurado" data-precio="890000" data-prendas="7" data-img="multimedia/look-01-a.jpg">
+          <div class="k-card__media k-card__media--swap">
+            <img class="img-fluid k-card__media-a" src="multimedia/look-01-a.jpg" alt="Look Noir Estructurado: chaleco y palazzo a rayas en negro con bolso tote">
+            <img class="img-fluid k-card__media-b" src="multimedia/look-01-b.jpg" alt="" aria-hidden="true">
+          </div>
+          <div class="k-look__info">
+            <p class="k-card__precio mb-2"><span class="k-card__precio-num">$890.000</span><span class="k-card__precio-meta">7 prendas</span></p>
+            <div class="k-tags">
+              <span class="k-tag">Dramático</span>
+              <span class="k-tag">Invierno</span>
+              <span class="k-tag">Triángulo inv.</span>
+              <span class="k-tag">Noche</span>
+            </div>
+            <p class="k-card__compo k-mono">Chaleco a rayas &middot; palazzo &middot; cinturón &middot; bolso tote &middot; gafas aviator &middot; brazaletes</p>
+          </div>
+        </article>
+
+        <article class="k-card k-look k-reveal" data-look="look-06" data-nombre="Pañuelo Tierra" data-precio="785000" data-prendas="7" data-img="multimedia/look-06-a.jpg">
+          <div class="k-card__media k-card__media--swap">
+            <img class="img-fluid k-card__media-a" src="multimedia/look-06-a.jpg" alt="Look Pañuelo Tierra: pañuelo oliva, top canalé crema y pantalón ancho marrón">
+            <img class="img-fluid k-card__media-b" src="multimedia/look-06-b.jpg" alt="" aria-hidden="true">
+          </div>
+          <div class="k-look__info">
+            <p class="k-card__precio mb-2"><span class="k-card__precio-num">$785.000</span><span class="k-card__precio-meta">7 prendas</span></p>
+            <div class="k-tags">
+              <span class="k-tag">Natural</span>
+              <span class="k-tag">Verano</span>
+              <span class="k-tag">Rectángulo</span>
+              <span class="k-tag">Casual</span>
+            </div>
+            <p class="k-card__compo k-mono">Pañuelo &middot; top canalé &middot; pantalón ancho &middot; bailarinas &middot; bolso de ante &middot; brazaletes &middot; gafas</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="text-center mt-5 k-reveal">
+        <a class="k-btn k-btn--invertido" href="secciones/productos.html">Ir al catálogo completo</a>
+      </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         BLOQUE 4b - CARRUSEL editorial (componente Bootstrap Carousel)
+         3 portadas destacadas que rotan en fade. Indicadores + flechas
+         por defecto, restyleadas en estilos.css.
+         ================================================================== -->
+    <section class="k-editorial" aria-labelledby="editorial-titulo">
+      <div class="k-contenedor">
+        <header class="text-center k-cab k-reveal">
+          <h2 class="k-h2" id="editorial-titulo">Portadas de la edición</h2>
+          <p class="k-desc k-medida k-centrado">Tres looks destacados en formato editorial. <strong>Desliza para verlos</strong> o deja que pasen solos.</p>
+        </header>
+
+        <div id="carruselEditorial" class="carousel slide carousel-fade k-editorial__car k-reveal" data-bs-ride="carousel" data-bs-interval="6000">
+          <div class="carousel-indicators k-editorial__ind">
+            <button type="button" data-bs-target="#carruselEditorial" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Portada 1: Cuero Urbano"></button>
+            <button type="button" data-bs-target="#carruselEditorial" data-bs-slide-to="1" aria-label="Portada 2: Mohair y Charol"></button>
+            <button type="button" data-bs-target="#carruselEditorial" data-bs-slide-to="2" aria-label="Portada 3: Denim de Pedrería"></button>
+          </div>
+
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="multimedia/look-05-a.jpg"
+                   srcset="multimedia/look-05-a-480.jpg 480w, multimedia/look-05-a-768.jpg 768w, multimedia/look-05-a-1440.jpg 1440w"
+                   sizes="(min-width: 1200px) 1140px, 100vw"
+                   class="d-block img-fluid w-100 k-editorial__foto"
+                   alt="Look Cuero Urbano: chaqueta de cuero negra ceñida con shorts y botas altas">
+              <div class="k-editorial__cap">
+                <span class="k-mono k-editorial__num">01 / 03</span>
+                <h3 class="k-editorial__nombre">Cuero Urbano</h3>
+                <p class="k-mono k-editorial__meta">Dramático &middot; Invierno &middot; Noche &middot; 6 piezas &middot; $1.240.000</p>
+                <a class="k-btn k-btn--rojo mt-3" href="secciones/detalle.html">Ver el look</a>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="multimedia/look-13-a.jpg"
+                   srcset="multimedia/look-13-a-480.jpg 480w, multimedia/look-13-a-768.jpg 768w, multimedia/look-13-a-1440.jpg 1440w"
+                   sizes="(min-width: 1200px) 1140px, 100vw"
+                   class="d-block img-fluid w-100 k-editorial__foto"
+                   alt="Look Mohair y Charol: cardigan mohair verde lima y falda burdeos de charol">
+              <div class="k-editorial__cap">
+                <span class="k-mono k-editorial__num">02 / 03</span>
+                <h3 class="k-editorial__nombre">Mohair y Charol</h3>
+                <p class="k-mono k-editorial__meta">Dramático &middot; Invierno &middot; Velada &middot; 7 piezas &middot; $1.090.000</p>
+                <a class="k-btn k-btn--rojo mt-3" href="secciones/productos.html">Ver en el catálogo</a>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="multimedia/look-16-a.jpg"
+                   srcset="multimedia/look-16-a-480.jpg 480w, multimedia/look-16-a-768.jpg 768w, multimedia/look-16-a-1440.jpg 1440w"
+                   sizes="(min-width: 1200px) 1140px, 100vw"
+                   class="d-block img-fluid w-100 k-editorial__foto"
+                   alt="Look Denim de Pedrería: camisa y pantalón denim cubiertos de pedrería de colores">
+              <div class="k-editorial__cap">
+                <span class="k-mono k-editorial__num">03 / 03</span>
+                <h3 class="k-editorial__nombre">Denim de Pedrería</h3>
+                <p class="k-mono k-editorial__meta">Dramático &middot; Primavera &middot; Velada &middot; 6 piezas &middot; $1.150.000</p>
+                <a class="k-btn k-btn--rojo mt-3" href="secciones/productos.html">Ver en el catálogo</a>
+              </div>
+            </div>
+          </div>
+
+          <button class="carousel-control-prev k-editorial__ctrl" type="button" data-bs-target="#carruselEditorial" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Portada anterior</span>
+          </button>
+          <button class="carousel-control-next k-editorial__ctrl" type="button" data-bs-target="#carruselEditorial" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Portada siguiente</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         BLOQUE 5 - CTA a pantalla completa
+         ================================================================== -->
+    <section class="k-bleed" aria-labelledby="bleed-titulo">
+      <img class="img-fluid k-bleed__fondo" src="multimedia/verte-bien.jpg" alt="" aria-hidden="true">
+      <div class="k-bleed__cara">
+        <div class="k-contenedor text-center">
+          <h2 class="k-bleed__titulo k-reveal" id="bleed-titulo">Verte bien, ahora es simple</h2>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         BLOQUE 6 - IA: determina tus características (maqueta, sin función)
+         ================================================================== -->
+    <section id="tu-tipo" class="k-tipo-sec" aria-labelledby="ia-titulo">
+      <div class="k-plancha">
+        <div class="k-contenedor position-relative">
+          <div class="row align-items-center g-4 g-lg-5">
+            <div class="col-lg-6 order-2 order-lg-1 k-reveal">
+              <h2 class="k-h2 k-plancha__titulo" id="ia-titulo">¿No conoces tus características?</h2>
+              <p class="k-desc k-medida">
+                Responde unas preguntas y sube una foto: <strong>la IA determina tu tipo, cromotipo y figura</strong>.
+              </p>
+              <button class="k-btn k-btn--invertido mt-2" type="button">Probar gratis</button>
+            </div>
+            <div class="col-lg-6 order-1 order-lg-2 k-reveal">
+              <div class="k-tipos" aria-label="Ejemplos: tipos de rostro y de figura">
+                <figure class="k-tipos__foto k-tipos__foto--1">
+                  <img class="img-fluid" src="multimedia/tipaje-rostros.jpg" alt="Ejemplos de distintos tipos de rostro">
+                </figure>
+                <figure class="k-tipos__foto k-tipos__foto--2">
+                  <img class="img-fluid" src="multimedia/tipaje-figuras.jpg" alt="Ejemplos de distintos tipos de figura corporal">
+                </figure>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         BLOQUE 7 - TENDENCIAS otoño 2026: collage con buscar similar
+         ================================================================== -->
+    <section class="k-contenedor k-sec" aria-labelledby="tendencias-titulo">
+      <header class="text-center k-cab k-reveal">
+        <h2 class="k-h2" id="tendencias-titulo">Tendencias otoño 2026</h2>
+        <p class="k-desc k-medida k-centrado">Las piezas que <strong>marcan la temporada</strong>. Pasa el cursor y <strong>busca looks que las lleven</strong>.</p>
+      </header>
+
+      <div class="k-trend-wrap">
+        <button class="k-trend-nav k-trend-nav--prev" type="button" data-trend-prev aria-label="Ver anterior">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>
+        </button>
+
+        <div class="k-trend" data-trend-track>
+          <figure class="k-trend__item k-trend--a k-reveal">
+            <img class="img-fluid" src="multimedia/tendencia-01.jpg" alt="Tendencia: conjunto con estampado de lunares otoño 2026">
+            <figcaption class="k-trend__cap k-mono">Estampado de lunares</figcaption>
+            <span class="k-trend__buscar" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+          </figure>
+          <figure class="k-trend__item k-trend--b k-reveal">
+            <img class="img-fluid" src="multimedia/tendencia-02.jpg" alt="Tendencia: chaqueta hussar roja con alamares otoño 2026">
+            <figcaption class="k-trend__cap k-mono">Chaqueta hussar</figcaption>
+            <span class="k-trend__buscar" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+          </figure>
+          <figure class="k-trend__item k-trend--c k-reveal">
+            <img class="img-fluid" src="multimedia/tendencia-03.jpg" alt="Tendencia: sambarinas a cordones, bailarinas deportivas otoño 2026">
+            <figcaption class="k-trend__cap k-mono">Sambarinas a cordones</figcaption>
+            <span class="k-trend__buscar" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+          </figure>
+          <figure class="k-trend__item k-trend--d k-reveal">
+            <img class="img-fluid" src="multimedia/tendencia-04.jpg" alt="Tendencia: pantalón harem blanco amplio otoño 2026">
+            <figcaption class="k-trend__cap k-mono">Pantalón harem</figcaption>
+            <span class="k-trend__buscar" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+          </figure>
+          <figure class="k-trend__item k-trend--a k-reveal">
+            <img class="img-fluid" src="multimedia/tendencia-05.jpg" alt="Tendencia: bolso de ante con flecos largos otoño 2026">
+            <figcaption class="k-trend__cap k-mono">Bolso con flecos</figcaption>
+            <span class="k-trend__buscar" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+          </figure>
+        </div>
+
+        <button class="k-trend-nav k-trend-nav--next" type="button" data-trend-next aria-label="Ver siguiente">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         BLOQUE 8 - PREGUNTAS FRECUENTES (accordion - componente Bootstrap)
+         ================================================================== -->
+    <section id="preguntas" class="k-sec" aria-labelledby="faq-titulo">
+      <div class="k-contenedor">
+        <header class="text-center k-cab k-reveal">
+          <h2 class="k-h2" id="faq-titulo">Preguntas frecuentes</h2>
+          <p class="k-desc k-medida k-centrado">Lo que preguntan quienes llegan por <strong>primera vez</strong> y quienes <strong>ya compran aquí</strong></p>
+        </header>
+
+        <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-7">
+        <div class="accordion k-acordeon k-reveal" id="acordeonFaq">
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-1" aria-expanded="true" aria-controls="faq-1">Cómo funciona comprar de varias tiendas a la vez</button>
+            </h3>
+            <div id="faq-1" class="accordion-collapse collapse show" data-bs-parent="#acordeonFaq">
+              <div class="accordion-body"><p class="mb-0">Consolidamos el pedido por ti: pagas una sola vez y coordinamos el envío desde cada tienda directamente a tu puerta.</p></div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-2" aria-expanded="false" aria-controls="faq-2">¿Pago gastos de envío por cada tienda?</button>
+            </h3>
+            <div id="faq-2" class="accordion-collapse collapse" data-bs-parent="#acordeonFaq">
+              <div class="accordion-body"><p class="mb-0">No. El envío se calcula una sola vez sobre el total del look, sin sorpresas al pagar.</p></div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-3" aria-expanded="false" aria-controls="faq-3">¿Qué es "mi tipo" y para qué sirve?</button>
+            </h3>
+            <div id="faq-3" class="accordion-collapse collapse" data-bs-parent="#acordeonFaq">
+              <div class="accordion-body"><p class="mb-0">Es la combinación de tu tipo de imagen (Kibbe), tu cromotipo y tu tipo de figura. Con esos datos te recomendamos looks que funcionan específicamente para ti.</p></div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-4" aria-expanded="false" aria-controls="faq-4">¿Cómo determina la IA mi tipo desde una foto?</button>
+            </h3>
+            <div id="faq-4" class="accordion-collapse collapse" data-bs-parent="#acordeonFaq">
+              <div class="accordion-body"><p class="mb-0">El modelo analiza proporciones, subtono de piel y nivel de contraste. El resultado es orientativo y siempre puedes ajustarlo a mano.</p></div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-5" aria-expanded="false" aria-controls="faq-5">¿Puedo cambiar una prenda del look por otra?</button>
+            </h3>
+            <div id="faq-5" class="accordion-collapse collapse" data-bs-parent="#acordeonFaq">
+              <div class="accordion-body"><p class="mb-0">Sí. En la vista de detalle puedes ajustar el set: quitar una prenda o cambiarla por una alternativa compatible en estilo y precio.</p></div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-6" aria-expanded="false" aria-controls="faq-6">¿Cómo funcionan los tableros?</button>
+            </h3>
+            <div id="faq-6" class="accordion-collapse collapse" data-bs-parent="#acordeonFaq">
+              <div class="accordion-body"><p class="mb-0">Son colecciones tuyas: guardas los looks que te gustan como pines y los organizas en tableros, igual que un moodboard.</p></div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-7" aria-expanded="false" aria-controls="faq-7">¿Cómo hago una devolución?</button>
+            </h3>
+            <div id="faq-7" class="accordion-collapse collapse" data-bs-parent="#acordeonFaq">
+              <div class="accordion-body"><p class="mb-0">Cada prenda sigue la política de su tienda de origen. Te mostramos esa información antes de comprar y gestionamos la devolución desde tu cuenta.</p></div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-8" aria-expanded="false" aria-controls="faq-8">¿Puedo combinar filtros de ocasión y de tipo?</button>
+            </h3>
+            <div id="faq-8" class="accordion-collapse collapse" data-bs-parent="#acordeonFaq">
+              <div class="accordion-body"><p class="mb-0">Sí, los filtros se acumulan: combina ocasión, tipo de imagen, cromotipo y tipo de figura para ver justo lo que te queda.</p></div>
+            </div>
+          </div>
+        </div>
+        </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ====================================================================
+       FOOTER (identico en las 3 paginas)
+       ==================================================================== -->
+  <footer class="k-footer">
+    <div class="k-contenedor">
+      <div class="row g-4 align-items-center">
+        <div class="col-md-6">
+          <p class="k-marca mb-2">KIOSCO<span class="k-marca__punto">.</span></p>
+          <p class="k-mono mb-1">Alumna: Sofiia Dziuba &middot; Composición Digital &middot; G0D53 &middot; TP2</p>
+          <p class="k-mono k-apagado mb-0">Docente: Florencia Cristina Coda Sánchez</p>
+        </div>
+        <div class="col-md-6">
+          <nav class="k-redes d-flex gap-3 justify-content-md-end" aria-label="Redes sociales">
+            <a href="https://www.instagram.com/ssooffaa___sd/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+            <a href="https://pin.it/6m7CR2mA1" target="_blank" rel="noopener noreferrer" aria-label="Pinterest"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.6 19.3c-.1-.8-.2-2 0-2.9l1.2-5s-.3-.6-.3-1.5c0-1.4.8-2.4 1.8-2.4.9 0 1.3.6 1.3 1.5 0 .9-.6 2.2-.9 3.5-.2 1 .5 1.9 1.6 1.9 1.9 0 3.2-2.4 3.2-5.3 0-2.2-1.5-3.8-4.1-3.8a4.7 4.7 0 0 0-4.9 4.7c0 .9.3 1.5.7 2 .2.2.2.3.1.5l-.2.9c-.1.3-.3.4-.6.2-1.2-.5-1.7-1.9-1.7-3.4 0-2.5 2.1-5.5 6.3-5.5 3.4 0 5.6 2.4 5.6 5.1 0 3.4-1.9 6-4.7 6-1 0-1.8-.5-2.1-1.1l-.6 2.2c-.2.7-.6 1.5-1 2A10 10 0 1 0 12 2z" fill="currentColor" stroke="none"/></svg></a>
+            <a href="https://www.tiktok.com/@ssooffaa_sd" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 3c.3 2.2 1.6 3.9 3.8 4.2v2.6c-1.4.1-2.7-.3-3.8-1v6.1c0 3.4-2.7 5.6-5.8 5.1A5 5 0 0 1 6 15.3c.2-2.6 2.4-4.5 5-4.3v2.7c-.5-.2-1-.2-1.5 0a2.2 2.2 0 0 0-1 2.9 2.3 2.3 0 0 0 4.4-1V3H16z"/></svg></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====================================================================
+       OFFCANVAS: filtros (por tags de las cards)
+       ==================================================================== -->
+  <aside class="offcanvas offcanvas-start k-panel" tabindex="-1" id="panelFiltros" aria-labelledby="filtrosTitulo">
+    <div class="offcanvas-header">
+      <h2 class="offcanvas-title" id="filtrosTitulo">Filtros</h2>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body">
+      <form data-filtros>
+        <fieldset class="k-fset">
+          <legend class="k-fset__leg k-mono">Género</legend>
+          <label class="k-check"><input type="checkbox" name="genero" value="mujer"> Mujer</label>
+          <label class="k-check"><input type="checkbox" name="genero" value="hombre"> Hombre</label>
+          <label class="k-check"><input type="checkbox" name="genero" value="unisex"> Unisex</label>
+        </fieldset>
+        <fieldset class="k-fset">
+          <legend class="k-fset__leg k-mono">Ocasión</legend>
+          <label class="k-check"><input type="checkbox" name="ocasion" value="dia"> Día</label>
+          <label class="k-check"><input type="checkbox" name="ocasion" value="trabajo"> Trabajo</label>
+          <label class="k-check"><input type="checkbox" name="ocasion" value="casual"> Casual / fin de semana</label>
+          <label class="k-check"><input type="checkbox" name="ocasion" value="noche"> Noche</label>
+          <label class="k-check"><input type="checkbox" name="ocasion" value="velada"> Velada / evento</label>
+        </fieldset>
+        <fieldset class="k-fset">
+          <legend class="k-fset__leg k-mono">Tipo de imagen (Kibbe)</legend>
+          <label class="k-check"><input type="checkbox" name="tipaje" value="dramatico"> Dramático</label>
+          <label class="k-check"><input type="checkbox" name="tipaje" value="natural"> Natural</label>
+          <label class="k-check"><input type="checkbox" name="tipaje" value="clasico"> Clásico</label>
+          <label class="k-check"><input type="checkbox" name="tipaje" value="romantico"> Romántico</label>
+          <label class="k-check"><input type="checkbox" name="tipaje" value="gamin"> Gamin</label>
+          <label class="k-check"><input type="checkbox" name="tipaje" value="mixto"> Tipaje mixto</label>
+        </fieldset>
+        <fieldset class="k-fset">
+          <legend class="k-fset__leg k-mono">Cromotipo</legend>
+          <label class="k-check"><input type="checkbox" name="cromotipo" value="invierno"> Invierno</label>
+          <label class="k-check"><input type="checkbox" name="cromotipo" value="primavera"> Primavera</label>
+          <label class="k-check"><input type="checkbox" name="cromotipo" value="verano"> Verano</label>
+          <label class="k-check"><input type="checkbox" name="cromotipo" value="otono"> Otoño</label>
+        </fieldset>
+        <fieldset class="k-fset">
+          <legend class="k-fset__leg k-mono">Tipo de figura</legend>
+          <label class="k-check"><input type="checkbox" name="figura" value="reloj"> Reloj de arena</label>
+          <label class="k-check"><input type="checkbox" name="figura" value="triangulo"> Triángulo / pera</label>
+          <label class="k-check"><input type="checkbox" name="figura" value="triangulo-inv"> Triángulo invertido</label>
+          <label class="k-check"><input type="checkbox" name="figura" value="rectangulo"> Rectángulo</label>
+          <label class="k-check"><input type="checkbox" name="figura" value="ovalo"> Óvalo / manzana</label>
+        </fieldset>
+        <fieldset class="k-fset">
+          <legend class="k-fset__leg k-mono">Categoría</legend>
+          <label class="k-check"><input type="checkbox" name="categoria" value="vestidos"> Vestidos</label>
+          <label class="k-check"><input type="checkbox" name="categoria" value="abrigos"> Abrigos</label>
+          <label class="k-check"><input type="checkbox" name="categoria" value="pantalones"> Pantalones</label>
+          <label class="k-check"><input type="checkbox" name="categoria" value="tops"> Tops y camisas</label>
+          <label class="k-check"><input type="checkbox" name="categoria" value="calzado-accesorios"> Calzado y accesorios</label>
+        </fieldset>
+
+        <div class="d-grid gap-2 mt-4">
+          <a class="k-btn k-btn--rojo justify-content-center" href="secciones/productos.html">Ver resultados</a>
+          <button class="k-btn justify-content-center" type="reset">Limpiar filtros</button>
+        </div>
+      </form>
+    </div>
+  </aside>
+
+  <!-- OFFCANVAS: cesta -->
+  <aside class="offcanvas offcanvas-end k-panel" tabindex="-1" id="panelCesta" aria-labelledby="cestaTitulo">
+    <div class="offcanvas-header">
+      <h2 class="offcanvas-title" id="cestaTitulo">Tu cesta</h2>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column">
+      <p class="k-panel__vacio" data-cesta-vacio>Tu cesta está vacía. Añade un look completo o una prenda suelta.</p>
+      <div data-cesta-lista></div>
+      <div class="mt-auto" data-cesta-pie hidden>
+        <div class="k-panel__total"><span>Total</span><span data-cesta-total>$0</span></div>
+        <a class="k-btn k-btn--rojo w-100 justify-content-center mt-3" href="secciones/detalle.html">Tramitar pedido</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- OFFCANVAS: cuenta + tableros -->
+  <aside class="offcanvas offcanvas-end k-panel" tabindex="-1" id="panelCuenta" aria-labelledby="cuentaTitulo">
+    <div class="offcanvas-header">
+      <h2 class="offcanvas-title" id="cuentaTitulo">Mi cuenta</h2>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body">
+      <p class="k-mono k-apagado mb-2">Mis tableros</p>
+      <p class="k-medida mb-4">Guarda looks como pines y agrúpalos en tableros, igual que un moodboard.</p>
+      <p class="k-panel__vacio" data-pines-vacio>Aún no has guardado ningún look. Toca el icono de guardar en una card.</p>
+      <div data-pines-lista></div>
+    </div>
+  </aside>
+
+  <!-- MODAL: añadir a la cesta -->
+  <div class="modal fade k-modal" id="modalCesta" tabindex="-1" aria-labelledby="modalCestaTitulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content k-modal__content">
+        <div class="modal-header">
+          <h2 class="modal-title k-card-titulo" id="modalCestaTitulo">Añadir a la cesta</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <p class="k-mono k-apagado mb-3" data-modal-look>Look</p>
+          <div class="d-grid gap-3">
+            <button class="k-btn k-btn--rojo justify-content-center" type="button" data-modal-anadir="look">Añadir el look completo</button>
+            <button class="k-btn justify-content-center" type="button" data-modal-anadir="prenda">Añadir solo una prenda</button>
+          </div>
+          <p class="k-mono k-apagado mt-3 mb-0">Podrás ajustar el set (quitar o cambiar piezas) en el detalle del look.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS (bundle con Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/principal.js"></script>
+  <script src="js/tienda.js"></script>
+</body>
+</html>

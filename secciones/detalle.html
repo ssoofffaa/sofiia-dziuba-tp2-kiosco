@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Cuero Urbano: look completo casual en KIOSCO. Mira las fotos, el desglose de cada pieza con su tienda y precio, y pide el look entero en un solo pedido.">
+  <title>KIOSCO - Cuero Urbano, el look completo</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+  <!-- Bootstrap 5 (CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- CSS propio (unico, sin estilos inline). Tipografias locales en /tipografias declaradas con @font-face dentro de estilos.css -->
+  <link href="../css/estilos.css" rel="stylesheet">
+</head>
+<body>
+  <div class="k-grano" aria-hidden="true"></div>
+
+  <!-- ====================================================================
+       MASTHEAD + NAVBAR (componente Bootstrap) - se fija al hacer scroll.
+       Identico al de las otras dos paginas (rutas con ../).
+       ==================================================================== -->
+  <header class="k-masthead">
+    <nav class="navbar navbar-expand-lg" aria-label="Navegación principal">
+      <div class="k-contenedor k-nav d-flex align-items-center flex-wrap flex-lg-nowrap w-100 gap-2">
+        <button class="k-iconbtn order-0 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuPrincipal" aria-controls="menuPrincipal" aria-label="Abrir menú">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+
+        <a class="k-marca order-1 mx-auto mx-lg-0 me-lg-4" href="../index.html" aria-label="KIOSCO - inicio">
+          KIOSCO<span class="k-marca__punto">.</span>
+        </a>
+
+        <div class="offcanvas-lg offcanvas-start order-3 order-lg-2 w-100 w-lg-auto me-lg-auto k-panel k-menu-panel" tabindex="-1" id="menuPrincipal" aria-labelledby="menuPrincipalTitulo">
+          <div class="offcanvas-header d-lg-none">
+            <a class="k-marca" href="../index.html" aria-label="KIOSCO - inicio" id="menuPrincipalTitulo">
+              KIOSCO<span class="k-marca__punto">.</span>
+            </a>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#menuPrincipal" aria-label="Cerrar menú"></button>
+          </div>
+          <div class="offcanvas-body">
+            <ul class="navbar-nav align-items-lg-center gap-lg-4">
+              <li class="nav-item"><a class="k-nav-link" href="../index.html">Inicio</a></li>
+              <li class="nav-item"><a class="k-nav-link" href="productos.html">Catálogo</a></li>
+              <li class="nav-item"><a class="k-nav-link" href="../index.html#tu-tipo">Tu tipo</a></li>
+              <li class="nav-item"><a class="k-nav-link" href="../index.html#preguntas">Ayuda</a></li>
+            </ul>
+            <div class="k-menu-extra d-lg-none">
+              <button class="k-btn k-menu-tema" type="button" data-toggle-tema aria-pressed="false" aria-label="Cambiar tema claro u oscuro">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+                Tema claro / oscuro
+              </button>
+              <p class="k-mono k-apagado mt-3 mb-0">Contacto: hola@kiosco.moda &middot; +34 600 000 000</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="k-nav-iconos d-flex align-items-center gap-2 order-2 order-lg-3">
+          <button class="k-iconbtn d-none d-lg-inline-grid" type="button" data-toggle-tema aria-pressed="false" aria-label="Cambiar tema claro u oscuro" title="Tema">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          </button>
+          <button class="k-iconbtn" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelCuenta" aria-controls="panelCuenta" aria-label="Mi cuenta y mis tableros" title="Mi cuenta">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+          </button>
+          <button class="k-iconbtn k-iconbtn--cesta" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelCesta" aria-controls="panelCesta" aria-label="Cesta" title="Cesta">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span class="k-cesta-badge" data-cesta-contador hidden>0</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ================================================================
+         CABECERA DEL LOOK: migas + carrusel de fotos + panel de compra
+         ================================================================ -->
+    <section class="k-contenedor k-sec" aria-labelledby="look-titulo">
+      <!-- Migas de pan: Inicio / Catalogo / nombre del look -->
+      <nav class="k-miga k-reveal" aria-label="Migas de pan">
+        <ol>
+          <li><a href="../index.html">Inicio</a></li>
+          <li><a href="productos.html">Catálogo</a></li>
+          <li aria-current="page">Look n.&ordm; 05</li>
+        </ol>
+      </nav>
+
+      <div class="row g-5">
+        <!-- IZQUIERDA: foto grande (sin pie). La cambian las miniaturas del
+             pedido de la derecha (js/principal.js -> iniciarDetalle). -->
+        <div class="col-12 col-lg-5 k-reveal">
+          <figure class="k-galeria" data-galeria>
+            <div class="k-galeria__visor">
+              <img class="img-fluid k-galeria__grande" data-foto-grande src="../multimedia/look-05-a.jpg" alt="Look Cuero Urbano completo">
+              <button type="button" class="k-galeria__flecha k-galeria__flecha--prev" data-galeria-prev aria-label="Foto anterior">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>
+              </button>
+              <button type="button" class="k-galeria__flecha k-galeria__flecha--next" data-galeria-next aria-label="Foto siguiente">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+              </button>
+              <div class="k-galeria__dots" data-galeria-dots role="tablist" aria-label="Selector de foto"></div>
+            </div>
+            <div class="k-galeria__angulos" data-galeria-angulos role="tablist" aria-label="Miniaturas de la pieza seleccionada"></div>
+          </figure>
+        </div>
+
+        <!-- DERECHA: panel-pedido. Cada pieza tiene casilla de pago, mini foto
+             (cambia la grande), talla y precio. El total y los botones operan
+             sobre lo marcado (js/principal.js -> iniciarDetalle). -->
+        <div class="col-12 col-lg-7 k-reveal">
+          <div class="k-detalle-panel" data-detalle>
+            <header>
+              <h1 class="k-h2" id="look-titulo">Cuero Urbano</h1>
+              <p class="k-desc">Chaqueta de cuero negra ceñida con cinturón, shorts y botas altas hasta la rodilla. Bolso tote metalizado y gafas transparentes: silueta dramática de noche, vertical y pulida. <strong>Cada pieza es de una tienda distinta</strong> y la pides toda de una vez.</p>
+            </header>
+
+            <div>
+              <p class="k-detalle-precio">$1.240.000</p>
+              <p class="k-detalle-meta k-mono k-apagado">6 piezas &middot; 3 tiendas &middot; un solo pedido</p>
+            </div>
+
+            <!-- Todos los tags del look (puede encajar en varios tipajes a la vez) -->
+            <div data-look-tags>
+              <p class="k-mono k-apagado mb-2">Le sienta a</p>
+              <div class="k-tags">
+                <span class="k-tag">Mujer</span>
+                <span class="k-tag">Dramático</span>
+                <span class="k-tag">Invierno</span>
+                <span class="k-tag">Triángulo inv.</span>
+                <span class="k-tag">Reloj de arena</span>
+                <span class="k-tag">Noche</span>
+                <span class="k-tag">Velada</span>
+              </div>
+            </div>
+
+            <!-- Pedido: casilla de pago + mini foto (cambia la grande) + talla + precio -->
+            <div>
+              <p class="k-mono k-apagado mb-2">Elige las piezas y la talla</p>
+
+              <div class="k-linea k-pedido" data-pieza data-look="look-05-p1" data-nombre="Chaqueta de cuero" data-precio="340000" data-img="../multimedia/prenda-chaqueta-1.jpg" data-angulos="../multimedia/prenda-chaqueta-1.jpg|../multimedia/prenda-chaqueta-2.jpg|../multimedia/prenda-chaqueta-3.jpg" data-alt-foto="Chaqueta de cuero del look Cuero Urbano">
+                <input class="k-pedido__check" type="checkbox" checked aria-label="Incluir Chaqueta de cuero en el pedido">
+                <button class="k-pedido__mini" type="button" data-foto="../multimedia/prenda-chaqueta-1.jpg" data-alt="Chaqueta de cuero del look Cuero Urbano">
+                  <img class="img-fluid" src="../multimedia/prenda-chaqueta-1.jpg" alt="Chaqueta de cuero corta">
+                </button>
+                <div class="k-linea__info">
+                  <p class="k-card-titulo mb-1">Chaqueta de cuero</p>
+                  <p class="k-mono k-apagado mb-1">Linne</p>
+                  <select class="k-pedido__talla" aria-label="Talla de Chaqueta de cuero">
+                    <option>XS</option><option>S</option><option selected>M</option><option>L</option><option>XL</option>
+                  </select>
+                </div>
+                <span class="k-mono k-pedido__precio">$340.000</span>
+              </div>
+
+              <div class="k-linea k-pedido" data-pieza data-look="look-05-p2" data-nombre="Shorts" data-precio="110000" data-img="../multimedia/prenda-shorts-1.jpg" data-angulos="../multimedia/prenda-shorts-1.jpg|../multimedia/prenda-shorts-2.jpg" data-alt-foto="Shorts del look Cuero Urbano">
+                <input class="k-pedido__check" type="checkbox" checked aria-label="Incluir Shorts en el pedido">
+                <button class="k-pedido__mini" type="button" data-foto="../multimedia/prenda-shorts-1.jpg" data-alt="Shorts del look Cuero Urbano">
+                  <img class="img-fluid" src="../multimedia/prenda-shorts-1.jpg" alt="Shorts cortos">
+                </button>
+                <div class="k-linea__info">
+                  <p class="k-card-titulo mb-1">Shorts</p>
+                  <p class="k-mono k-apagado mb-1">Oraculo</p>
+                  <select class="k-pedido__talla" aria-label="Talla de Shorts">
+                    <option>XS</option><option selected>S</option><option>M</option><option>L</option><option>XL</option>
+                  </select>
+                </div>
+                <span class="k-mono k-pedido__precio">$110.000</span>
+              </div>
+
+              <div class="k-linea k-pedido" data-pieza data-look="look-05-p3" data-nombre="Botas de cuero" data-precio="380000" data-img="../multimedia/prenda-botas-1.jpg" data-angulos="../multimedia/prenda-botas-1.jpg|../multimedia/prenda-botas-2.jpg|../multimedia/prenda-botas-3.jpg" data-alt-foto="Botas altas de cuero del look Cuero Urbano">
+                <input class="k-pedido__check" type="checkbox" checked aria-label="Incluir Botas de cuero en el pedido">
+                <button class="k-pedido__mini" type="button" data-foto="../multimedia/prenda-botas-1.jpg" data-alt="Botas del look Cuero Urbano">
+                  <img class="img-fluid" src="../multimedia/prenda-botas-1.jpg" alt="Botas altas de cuero">
+                </button>
+                <div class="k-linea__info">
+                  <p class="k-card-titulo mb-1">Botas altas de cuero</p>
+                  <p class="k-mono k-apagado mb-1">Grado</p>
+                  <select class="k-pedido__talla" aria-label="Talla de Botas">
+                    <option>36</option><option>37</option><option selected>38</option><option>39</option><option>40</option>
+                  </select>
+                </div>
+                <span class="k-mono k-pedido__precio">$380.000</span>
+              </div>
+
+              <div class="k-linea k-pedido" data-pieza data-look="look-05-p4" data-nombre="Bolso" data-precio="280000" data-img="../multimedia/prenda-bolso-1.jpg" data-angulos="../multimedia/prenda-bolso-1.jpg|../multimedia/prenda-bolso-2.jpg|../multimedia/prenda-bolso-3.jpg" data-alt-foto="Bolso tote metalizado del look Cuero Urbano">
+                <input class="k-pedido__check" type="checkbox" checked aria-label="Incluir Bolso en el pedido">
+                <button class="k-pedido__mini" type="button" data-foto="../multimedia/prenda-bolso-1.jpg" data-alt="Bolso del look Cuero Urbano">
+                  <img class="img-fluid" src="../multimedia/prenda-bolso-1.jpg" alt="Bolso tote metalizado">
+                </button>
+                <div class="k-linea__info">
+                  <p class="k-card-titulo mb-1">Bolso tote metalizado</p>
+                  <p class="k-mono k-apagado mb-1">Linne</p>
+                  <select class="k-pedido__talla" aria-label="Talla de Bolso">
+                    <option selected>Única</option>
+                  </select>
+                </div>
+                <span class="k-mono k-pedido__precio">$280.000</span>
+              </div>
+
+              <div class="k-linea k-pedido" data-pieza data-look="look-05-p5" data-nombre="Gafas" data-precio="80000" data-img="../multimedia/prenda-gafas-1.jpg" data-angulos="../multimedia/prenda-gafas-1.jpg|../multimedia/prenda-gafas-2.jpg" data-alt-foto="Gafas de sol del look Cuero Urbano">
+                <input class="k-pedido__check" type="checkbox" checked aria-label="Incluir Gafas en el pedido">
+                <button class="k-pedido__mini" type="button" data-foto="../multimedia/prenda-gafas-1.jpg" data-alt="Gafas del look Cuero Urbano">
+                  <img class="img-fluid" src="../multimedia/prenda-gafas-1.jpg" alt="Gafas de sol">
+                </button>
+                <div class="k-linea__info">
+                  <p class="k-card-titulo mb-1">Gafas de sol</p>
+                  <p class="k-mono k-apagado mb-1">Oraculo</p>
+                  <select class="k-pedido__talla" aria-label="Talla de Gafas">
+                    <option selected>Única</option>
+                  </select>
+                </div>
+                <span class="k-mono k-pedido__precio">$80.000</span>
+              </div>
+
+              <div class="k-linea k-pedido" data-pieza data-look="look-05-p6" data-nombre="Pendientes" data-precio="50000" data-img="../multimedia/prenda-pendientes-1.jpg" data-angulos="../multimedia/prenda-pendientes-1.jpg" data-alt-foto="Pendientes del look Cuero Urbano">
+                <input class="k-pedido__check" type="checkbox" checked aria-label="Incluir Pendientes en el pedido">
+                <button class="k-pedido__mini" type="button" data-foto="../multimedia/prenda-pendientes-1.jpg" data-alt="Pendientes del look Cuero Urbano">
+                  <img class="img-fluid" src="../multimedia/prenda-pendientes-1.jpg" alt="Pendientes">
+                </button>
+                <div class="k-linea__info">
+                  <p class="k-card-titulo mb-1">Pendientes</p>
+                  <p class="k-mono k-apagado mb-1">Grado</p>
+                  <select class="k-pedido__talla" aria-label="Talla de Pendientes">
+                    <option selected>Única</option>
+                  </select>
+                </div>
+                <span class="k-mono k-pedido__precio">$50.000</span>
+              </div>
+
+              <!-- Fila final: vuelve a la foto del look completo y marca/desmarca todo -->
+              <div class="k-linea k-pedido k-pedido--todo" data-angulos="../multimedia/look-05-a.jpg|../multimedia/look-05-c.jpg|../multimedia/look-05-d.jpg|../multimedia/look-05-e.jpg|../multimedia/look-05-b.jpg" data-alt-foto="Look Cuero Urbano completo">
+                <input class="k-pedido__check" type="checkbox" data-detalle-todo checked aria-label="Seleccionar todas las piezas">
+                <button class="k-pedido__mini is-activa" type="button" data-foto="../multimedia/look-05-a.jpg" data-alt="Look Cuero Urbano completo">
+                  <img class="img-fluid" src="../multimedia/look-05-a.jpg" alt="Look Cuero Urbano completo">
+                </button>
+                <div class="k-linea__info">
+                  <p class="k-card-titulo mb-1">Look completo</p>
+                  <p class="k-mono k-apagado mb-0">Volver a la foto del conjunto</p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="k-panel__total"><span>Total a pagar</span><span data-detalle-total>$1.240.000</span></div>
+              <div class="d-grid gap-2 mt-3">
+                <button class="k-btn k-btn--rojo justify-content-center" type="button" data-detalle-comprar>Comprar ahora</button>
+                <button class="k-btn justify-content-center" type="button" data-detalle-add>Añadir a la cesta</button>
+              </div>
+              <p class="k-mono k-apagado mt-3 mb-0">Las piezas marcadas se añaden con su talla. Quita la marca para no incluirlas.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         DESGLOSE DE LA CÁPSULA: una tarjeta cuadrada por pieza (4 por
+         línea). Cada pieza se puede gustar / guardar / añadir a la cesta
+         al pasar el ratón (acciones inyectadas por tienda.js), sin tags.
+         ================================================================ -->
+    <section class="k-contenedor k-sec" aria-labelledby="desglose-titulo">
+      <header class="k-cab text-center">
+        <h2 class="k-h2" id="desglose-titulo">Desglose de la cápsula</h2>
+        <p class="k-desc k-medida mx-auto">Cada elemento del look, suelto. <strong>Añade solo lo que te falte</strong> o el look entero arriba.</p>
+      </header>
+
+      <div class="row g-4">
+        <!-- pieza 1: Chaqueta de cuero (3 fotos) -->
+        <div class="col-6 col-md-4 col-lg-3 k-pieza k-reveal">
+          <article class="k-card" data-directo data-look="look-05-p1" data-nombre="Chaqueta de cuero" data-precio="340000" data-img="../multimedia/prenda-chaqueta-1.jpg">
+            <div class="k-card__media k-card__media--swap">
+              <img class="img-fluid k-card__media-a" src="../multimedia/prenda-chaqueta-1.jpg" alt="Chaqueta de cuero corta">
+              <img class="img-fluid k-card__media-b" src="../multimedia/prenda-chaqueta-2.jpg" alt="" aria-hidden="true">
+            </div>
+            <div class="k-pieza__cuerpo">
+              <span class="k-pieza__nombre">Chaqueta de cuero<small class="k-pieza__tienda k-mono k-apagado">Linne</small></span>
+              <span class="k-pieza__precio">$340.000</span>
+            </div>
+          </article>
+        </div>
+        <!-- pieza 2: Shorts (2 fotos) -->
+        <div class="col-6 col-md-4 col-lg-3 k-pieza k-reveal">
+          <article class="k-card" data-directo data-look="look-05-p2" data-nombre="Shorts" data-precio="110000" data-img="../multimedia/prenda-shorts-1.jpg">
+            <div class="k-card__media k-card__media--swap">
+              <img class="img-fluid k-card__media-a" src="../multimedia/prenda-shorts-1.jpg" alt="Shorts cortos">
+              <img class="img-fluid k-card__media-b" src="../multimedia/prenda-shorts-2.jpg" alt="" aria-hidden="true">
+            </div>
+            <div class="k-pieza__cuerpo">
+              <span class="k-pieza__nombre">Shorts<small class="k-pieza__tienda k-mono k-apagado">Oraculo</small></span>
+              <span class="k-pieza__precio">$110.000</span>
+            </div>
+          </article>
+        </div>
+        <!-- pieza 3: Botas de cuero (3 fotos) -->
+        <div class="col-6 col-md-4 col-lg-3 k-pieza k-reveal">
+          <article class="k-card" data-directo data-look="look-05-p3" data-nombre="Botas altas de cuero" data-precio="380000" data-img="../multimedia/prenda-botas-1.jpg">
+            <div class="k-card__media k-card__media--swap">
+              <img class="img-fluid k-card__media-a" src="../multimedia/prenda-botas-1.jpg" alt="Botas altas de cuero">
+              <img class="img-fluid k-card__media-b" src="../multimedia/prenda-botas-2.jpg" alt="" aria-hidden="true">
+            </div>
+            <div class="k-pieza__cuerpo">
+              <span class="k-pieza__nombre">Botas altas de cuero<small class="k-pieza__tienda k-mono k-apagado">Grado</small></span>
+              <span class="k-pieza__precio">$380.000</span>
+            </div>
+          </article>
+        </div>
+        <!-- pieza 4: Bolso bandolera (3 fotos) -->
+        <div class="col-6 col-md-4 col-lg-3 k-pieza k-reveal">
+          <article class="k-card" data-directo data-look="look-05-p4" data-nombre="Bolso tote metalizado" data-precio="280000" data-img="../multimedia/prenda-bolso-1.jpg">
+            <div class="k-card__media k-card__media--swap">
+              <img class="img-fluid k-card__media-a" src="../multimedia/prenda-bolso-1.jpg" alt="Bolso tote metalizado">
+              <img class="img-fluid k-card__media-b" src="../multimedia/prenda-bolso-2.jpg" alt="" aria-hidden="true">
+            </div>
+            <div class="k-pieza__cuerpo">
+              <span class="k-pieza__nombre">Bolso tote metalizado<small class="k-pieza__tienda k-mono k-apagado">Linne</small></span>
+              <span class="k-pieza__precio">$280.000</span>
+            </div>
+          </article>
+        </div>
+        <!-- pieza 5: Gafas de sol (2 fotos) -->
+        <div class="col-6 col-md-4 col-lg-3 k-pieza k-reveal">
+          <article class="k-card" data-directo data-look="look-05-p5" data-nombre="Gafas" data-precio="80000" data-img="../multimedia/prenda-gafas-1.jpg">
+            <div class="k-card__media k-card__media--swap">
+              <img class="img-fluid k-card__media-a" src="../multimedia/prenda-gafas-1.jpg" alt="Gafas de sol">
+              <img class="img-fluid k-card__media-b" src="../multimedia/prenda-gafas-2.jpg" alt="" aria-hidden="true">
+            </div>
+            <div class="k-pieza__cuerpo">
+              <span class="k-pieza__nombre">Gafas de sol<small class="k-pieza__tienda k-mono k-apagado">Oraculo</small></span>
+              <span class="k-pieza__precio">$80.000</span>
+            </div>
+          </article>
+        </div>
+        <!-- pieza 6: Pendientes (1 foto) -->
+        <div class="col-6 col-md-4 col-lg-3 k-pieza k-reveal">
+          <article class="k-card" data-directo data-look="look-05-p6" data-nombre="Pendientes" data-precio="50000" data-img="../multimedia/prenda-pendientes-1.jpg">
+            <div class="k-card__media">
+              <img class="img-fluid" src="../multimedia/prenda-pendientes-1.jpg" alt="Pendientes">
+            </div>
+            <div class="k-pieza__cuerpo">
+              <span class="k-pieza__nombre">Pendientes<small class="k-pieza__tienda k-mono k-apagado">Grado</small></span>
+              <span class="k-pieza__precio">$50.000</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         LOOKS SIMILARES: fila de cards del catalogo (mismos ids que en
+         productos.html, para que likes y tableros sincronicen). Reutiliza
+         el formato de card del catalogo (.k-cat-info) con acciones inyectadas.
+         ================================================================ -->
+    <section class="k-contenedor k-sec" aria-labelledby="similares-titulo">
+      <header class="k-cab text-center">
+        <h2 class="k-h2" id="similares-titulo">Looks similares</h2>
+        <p class="k-desc k-medida mx-auto">Otros looks de la misma edición. En rojo, los rasgos que comparten con este look.</p>
+      </header>
+
+      <div class="row g-4" data-similares>
+        <!-- look-01 -->
+        <div class="col-6 col-md-3 k-reveal">
+          <article class="k-card" data-look="look-01" data-nombre="Noir Estructurado" data-precio="890000" data-prendas="7" data-img="../multimedia/look-01-a.jpg">
+            <div class="k-card__media k-card__media--swap">
+              <img class="img-fluid k-card__media-a" src="../multimedia/look-01-a.jpg" alt="Look Noir Estructurado: chaleco y palazzo a rayas en negro con bolso tote">
+              <img class="img-fluid k-card__media-b" src="../multimedia/look-01-b.jpg" alt="" aria-hidden="true">
+            </div>
+            <div class="k-cat-info">
+              <p class="k-card__precio mb-0"><span class="k-card__precio-num">$890.000</span><span class="k-card__precio-meta">7 prendas</span></p>
+              <div class="k-tags">
+                <span class="k-tag">Mujer</span><span class="k-tag">Dramático</span><span class="k-tag">Invierno</span><span class="k-tag">Noche</span>
+              </div>            </div>
+          </article>
+        </div>
+        <!-- look-09 -->
+        <div class="col-6 col-md-3 k-reveal">
+          <article class="k-card" data-look="look-09" data-nombre="Cuero Bombón" data-precio="980000" data-prendas="5" data-img="../multimedia/look-09-a.jpg">
+            <div class="k-card__media k-card__media--swap">
+              <img class="img-fluid k-card__media-a" src="../multimedia/look-09-a.jpg" alt="Look Cuero Bombón: corsé y pantalón de cuero marrón con bolso slouchy">
+              <img class="img-fluid k-card__media-b" src="../multimedia/look-09-b.jpg" alt="" aria-hidden="true">
+            </div>
+            <div class="k-cat-info">
+              <p class="k-card__precio mb-0"><span class="k-card__precio-num">$980.000</span><span class="k-card__precio-meta">5 prendas</span></p>
+              <div class="k-tags">
+                <span class="k-tag">Mujer</span><span class="k-tag">Dramático</span><span class="k-tag">Otoño</span><span class="k-tag">Noche</span>
+              </div>            </div>
+          </article>
+        </div>
+        <!-- look-03 -->
+        <div class="col-6 col-md-3 k-reveal">
+          <article class="k-card" data-look="look-03" data-nombre="Tweed Salvia" data-precio="760000" data-prendas="6" data-img="../multimedia/look-03-a.jpg">
+            <div class="k-card__media k-card__media--swap">
+              <img class="img-fluid k-card__media-a" src="../multimedia/look-03-a.jpg" alt="Look Tweed Salvia: cardigan verde, top canalé marrón y falda tweed crema">
+              <img class="img-fluid k-card__media-b" src="../multimedia/look-03-b.jpg" alt="" aria-hidden="true">
+            </div>
+            <div class="k-cat-info">
+              <p class="k-card__precio mb-0"><span class="k-card__precio-num">$760.000</span><span class="k-card__precio-meta">6 prendas</span></p>
+              <div class="k-tags">
+                <span class="k-tag">Mujer</span><span class="k-tag">Clásico</span><span class="k-tag">Primavera</span><span class="k-tag">Día</span>
+              </div>            </div>
+          </article>
+        </div>
+        <!-- look-13 -->
+        <div class="col-6 col-md-3 k-reveal">
+          <article class="k-card" data-look="look-13" data-nombre="Mohair y Charol" data-precio="1090000" data-prendas="7" data-img="../multimedia/look-13-a.jpg">
+            <div class="k-card__media k-card__media--swap">
+              <img class="img-fluid k-card__media-a" src="../multimedia/look-13-a.jpg" alt="Look Mohair y Charol: cardigan mohair verde lima y falda burdeos de charol">
+              <img class="img-fluid k-card__media-b" src="../multimedia/look-13-b.jpg" alt="" aria-hidden="true">
+            </div>
+            <div class="k-cat-info">
+              <p class="k-card__precio mb-0"><span class="k-card__precio-num">$1.090.000</span><span class="k-card__precio-meta">7 prendas</span></p>
+              <div class="k-tags">
+                <span class="k-tag">Mujer</span><span class="k-tag">Dramático</span><span class="k-tag">Invierno</span><span class="k-tag">Velada</span>
+              </div>            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center mt-5">
+        <a class="k-btn" href="productos.html">Ver todo el catálogo
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ====================================================================
+       FOOTER (identico en las 3 paginas)
+       ==================================================================== -->
+  <footer class="k-footer">
+    <div class="k-contenedor">
+      <div class="row g-4 align-items-center">
+        <div class="col-md-6">
+          <p class="k-marca mb-2">KIOSCO<span class="k-marca__punto">.</span></p>
+          <p class="k-mono mb-1">Alumna: Sofiia Dziuba &middot; Composición Digital &middot; G0D53 &middot; TP2</p>
+          <p class="k-mono k-apagado mb-0">Docente: Florencia Cristina Coda Sánchez</p>
+        </div>
+        <div class="col-md-6">
+          <nav class="k-redes d-flex gap-3 justify-content-md-end" aria-label="Redes sociales">
+            <a href="https://www.instagram.com/ssooffaa___sd/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+            <a href="https://pin.it/6m7CR2mA1" target="_blank" rel="noopener noreferrer" aria-label="Pinterest"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.6 19.3c-.1-.8-.2-2 0-2.9l1.2-5s-.3-.6-.3-1.5c0-1.4.8-2.4 1.8-2.4.9 0 1.3.6 1.3 1.5 0 .9-.6 2.2-.9 3.5-.2 1 .5 1.9 1.6 1.9 1.9 0 3.2-2.4 3.2-5.3 0-2.2-1.5-3.8-4.1-3.8a4.7 4.7 0 0 0-4.9 4.7c0 .9.3 1.5.7 2 .2.2.2.3.1.5l-.2.9c-.1.3-.3.4-.6.2-1.2-.5-1.7-1.9-1.7-3.4 0-2.5 2.1-5.5 6.3-5.5 3.4 0 5.6 2.4 5.6 5.1 0 3.4-1.9 6-4.7 6-1 0-1.8-.5-2.1-1.1l-.6 2.2c-.2.7-.6 1.5-1 2A10 10 0 1 0 12 2z" fill="currentColor" stroke="none"/></svg></a>
+            <a href="https://www.tiktok.com/@ssooffaa_sd" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 3c.3 2.2 1.6 3.9 3.8 4.2v2.6c-1.4.1-2.7-.3-3.8-1v6.1c0 3.4-2.7 5.6-5.8 5.1A5 5 0 0 1 6 15.3c.2-2.6 2.4-4.5 5-4.3v2.7c-.5-.2-1-.2-1.5 0a2.2 2.2 0 0 0-1 2.9 2.3 2.3 0 0 0 4.4-1V3H16z"/></svg></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- OFFCANVAS: cesta -->
+  <aside class="offcanvas offcanvas-end k-panel" tabindex="-1" id="panelCesta" aria-labelledby="cestaTitulo">
+    <div class="offcanvas-header">
+      <h2 class="offcanvas-title" id="cestaTitulo">Tu cesta</h2>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column">
+      <p class="k-panel__vacio" data-cesta-vacio>Tu cesta está vacía. Añade un look completo o una prenda suelta.</p>
+      <div data-cesta-lista></div>
+      <div class="mt-auto" data-cesta-pie hidden>
+        <div class="k-panel__total"><span>Total</span><span data-cesta-total>$0</span></div>
+        <a class="k-btn k-btn--rojo w-100 justify-content-center mt-3" href="detalle.html">Tramitar pedido</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- OFFCANVAS: cuenta + tableros -->
+  <aside class="offcanvas offcanvas-end k-panel" tabindex="-1" id="panelCuenta" aria-labelledby="cuentaTitulo">
+    <div class="offcanvas-header">
+      <h2 class="offcanvas-title" id="cuentaTitulo">Mi cuenta</h2>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body">
+      <p class="k-mono k-apagado mb-2">Mis tableros</p>
+      <p class="k-medida mb-4">Guarda looks como pines y agrúpalos en tableros, igual que un moodboard.</p>
+      <p class="k-panel__vacio" data-pines-vacio>Aún no has guardado ningún look. Toca el icono de guardar en una card.</p>
+      <div data-pines-lista></div>
+    </div>
+  </aside>
+
+  <!-- MODAL: añadir a la cesta (looks similares lo usan; las piezas se añaden directo) -->
+  <div class="modal fade k-modal" id="modalCesta" tabindex="-1" aria-labelledby="modalCestaTitulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content k-modal__content">
+        <div class="modal-header">
+          <h2 class="modal-title k-card-titulo" id="modalCestaTitulo">Añadir a la cesta</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <p class="k-mono k-apagado mb-3" data-modal-look>Look</p>
+          <div class="d-grid gap-3">
+            <button class="k-btn k-btn--rojo justify-content-center" type="button" data-modal-anadir="look">Añadir el look completo</button>
+            <button class="k-btn justify-content-center" type="button" data-modal-anadir="prenda">Añadir solo una prenda</button>
+          </div>
+          <p class="k-mono k-apagado mt-3 mb-0">Podrás ajustar el set (quitar o cambiar piezas) en el detalle del look.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS (bundle con Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/principal.js"></script>
+  <script src="../js/tienda.js"></script>
+</body>
+</html>

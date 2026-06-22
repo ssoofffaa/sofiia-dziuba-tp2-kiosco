@@ -1,0 +1,1730 @@
+/* ==========================================================================
+   KIOSCO - estilos.css
+   Fuente de verdad: DESIGN.md (variante B - collage / brutalismo suizo)
+   Todo el CSS propio vive aqui. Cero estilos inline en el HTML.
+   Estructura:
+     0. Tipografias locales   - copias .woff2 en /tipografias
+     1. Tokens (:root)        - colores, tipografia, espaciado, sombras
+     2. Reset / base          - normalizacion y body
+     3. Textura               - overlay de grano fijo
+     4. Tipografia            - escala display/h2/cuerpo/mono
+     5. Utilidades de collage - fantasma, cinta, sello, contorno
+     6. Componentes           - ticker, masthead, botones, cards, tabla, footer
+     7. Motion                - fade-in y hover
+     8. Dark mode             - tokens alternos (opcional)
+   ========================================================================== */
+
+/* ==========================================================================
+   0. TIPOGRAFIAS LOCALES (copias .woff2 en /tipografias)
+   Archivo (titulares) + Hanken Grotesk (texto) + Space Mono (etiquetas)
+   ========================================================================== */
+@font-face { font-family: 'Archivo'; font-style: normal; font-weight: 400; font-display: swap; src: url('../tipografias/archivo-400.woff2') format('woff2'); }
+@font-face { font-family: 'Archivo'; font-style: normal; font-weight: 500; font-display: swap; src: url('../tipografias/archivo-500.woff2') format('woff2'); }
+@font-face { font-family: 'Archivo'; font-style: normal; font-weight: 700; font-display: swap; src: url('../tipografias/archivo-700.woff2') format('woff2'); }
+@font-face { font-family: 'Archivo'; font-style: normal; font-weight: 800; font-display: swap; src: url('../tipografias/archivo-800.woff2') format('woff2'); }
+@font-face { font-family: 'Archivo'; font-style: normal; font-weight: 900; font-display: swap; src: url('../tipografias/archivo-900.woff2') format('woff2'); }
+@font-face { font-family: 'Hanken Grotesk'; font-style: normal; font-weight: 400; font-display: swap; src: url('../tipografias/hankengrotesk-400.woff2') format('woff2'); }
+@font-face { font-family: 'Hanken Grotesk'; font-style: normal; font-weight: 500; font-display: swap; src: url('../tipografias/hankengrotesk-500.woff2') format('woff2'); }
+@font-face { font-family: 'Hanken Grotesk'; font-style: normal; font-weight: 700; font-display: swap; src: url('../tipografias/hankengrotesk-700.woff2') format('woff2'); }
+@font-face { font-family: 'Hanken Grotesk'; font-style: normal; font-weight: 800; font-display: swap; src: url('../tipografias/hankengrotesk-800.woff2') format('woff2'); }
+@font-face { font-family: 'Space Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url('../tipografias/spacemono-400.woff2') format('woff2'); }
+@font-face { font-family: 'Space Mono'; font-style: normal; font-weight: 700; font-display: swap; src: url('../tipografias/spacemono-700.woff2') format('woff2'); }
+
+/* ==========================================================================
+   1. TOKENS
+   ========================================================================== */
+:root {
+  /* -- Color (monocromo + 1 acento) -- */
+  --papel: #EFEBE2;       /* fondo */
+  --surface: #FBFAF6;     /* tarjetas */
+  --tinta: #141414;       /* texto */
+  --muted: #6B6862;       /* texto apagado */
+  --rojo: #AC2744;        /* acento unico - CTA, filtros activos, numeros de look */
+  --rojo-tinta: #FBFAF6;  /* texto sobre rojo */
+  --blanco: #FFFFFF;      /* blanco puro - botones y tags (sin tinte beige) */
+  --negro: #000000;       /* negro puro - texto de las descripciones (peticion) */
+
+  /* -- Tipografia -- */
+  --fuente-display: "Archivo", system-ui, sans-serif;          /* titulares (eje expandido) */
+  --fuente-cuerpo: "Hanken Grotesk", system-ui, sans-serif;    /* naborny / descripciones */
+  --fuente-mono: "Space Mono", ui-monospace, monospace;        /* etiquetas, precios, numeros */
+  --ls-cuerpo: -0.02em;     /* letter-spacing del texto de lectura (peticion: -2) */
+
+  /* Escala tipografica responsiva (clamp)
+     NOTA: DESIGN.md indica clamp(40px, 11vw, 150px). El minimo de 40px hace que
+     la palabra mas larga del hero ("RECORTADO") desborde a 320px (328px > 272px
+     disponibles). La regla dura del examen (cero scroll horizontal) manda, asi
+     que bajamos el minimo a 30px para que entre completa. Desktop intacto (cap 150px). */
+  /* Hero: el texto vive en una columna estrecha (col-5) junto a la foto, asi que
+     el tope baja para que "COMPLETO" entre completo sin cortarse. En movil se
+     agranda aparte (ver bloque adaptive). */
+  --t-hero: clamp(24px, 4.6vw, 68px);
+  --t-h2: clamp(22px, 3.6vw, 42px);
+  --t-card: 18px;
+  --t-cuerpo: clamp(15px, 1.1vw, 16px);
+  --t-mono: clamp(11px, 0.9vw, 13px);
+
+  --lh-hero: 0.9;
+  --lh-h2: 0.95;
+  --lh-cuerpo: 1.45;
+
+  --ls-mono: 0.08em;      /* letter-spacing mono (rango .06-.12) */
+  --wdth-card: 115;       /* eje expandido de Archivo en titulos de card */
+
+  /* -- Espaciado (base 8, escala DESIGN.md) -- */
+  --e-1: 4px;
+  --e-2: 8px;
+  --e-3: 14px;
+  --e-4: 18px;
+  --e-5: 24px;
+  --e-6: 32px;
+  --e-7: 40px;
+  --e-8: 64px;
+  --gutter-galeria: 18px;
+
+  /* -- Layout -- */
+  --max-contenido: 1280px;
+  --pad-lateral: 24px;
+  --radio: 0;                 /* brutalista: sin radios */
+
+  /* -- Bordes y sombras duras -- */
+  --borde: 2px solid var(--tinta);
+  --borde-fino: 1px solid var(--tinta);
+  --separador: 5px double var(--tinta);
+  --sombra-dura: 6px 6px 0 var(--tinta);
+  --sombra-dura-rojo: 6px 6px 0 var(--rojo);
+
+  /* -- Motion -- */
+  --d-micro: 100ms;
+  --d-corta: 200ms;
+  --d-media: 400ms;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);  /* ease-out al entrar */
+}
+
+/* ==========================================================================
+   2. RESET / BASE
+   ========================================================================== */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  /* clip (no hidden): corta el desborde horizontal igual que hidden PERO sin
+     crear un contenedor de scroll, asi `position:sticky` del header sigue
+     funcionando. Con overflow-x:hidden el navegador forzaba overflow-y:auto y
+     rompia el sticky (el menu no se quedaba fijo al hacer scroll). */
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  background-color: var(--papel);
+  color: var(--tinta);
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--t-cuerpo);
+  line-height: var(--lh-cuerpo);
+  letter-spacing: var(--ls-cuerpo);
+  font-weight: 400;
+  /* clave anti-scroll-horizontal: clip corta el desborde sin romper el sticky */
+  overflow-x: clip;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--rojo); }
+
+/* Contenedor de contenido centrado con ancho maximo */
+.k-contenedor {
+  width: 100%;
+  max-width: var(--max-contenido);
+  margin-inline: auto;
+  padding-inline: var(--pad-lateral);
+}
+
+/* Limita el ancho de medida de un parrafo para buena lectura (~46 caracteres) */
+.k-medida { max-width: 46ch; }
+
+/* Descripcion bajo el titulo: mismo margen, negro puro y mismo peso en TODOS
+   los bloques (peticion de unificacion). Los acentos clave van en <strong>. */
+.k-desc {
+  margin-top: var(--e-3);     /* gap titulo -> descripcion uniforme en todo el sitio */
+  color: var(--negro);
+  font-weight: 500;
+}
+.k-desc strong { font-weight: 700; color: inherit; }
+
+/* Separacion encabezado de bloque -> contenido: maximo 30px (peticion) */
+.k-cab { margin-bottom: var(--e-5); }   /* 24px, por debajo del limite de 30px */
+
+/* Separador unico entre TODOS los bloques: misma linea fina negra.
+   Cada section bajo <main> (salvo la primera) lleva su linea superior. */
+main > section + section { border-top: 1px solid var(--tinta); }
+
+/* Espaciado vertical de bloque: 1.5x respecto al py-5 de Bootstrap (48 -> 72px),
+   adaptable en pantallas pequenas (peticion). Sustituye a .py-5 en las secciones. */
+.k-sec { padding-block: clamp(44px, 7vw, 72px); }
+
+/* Bloque con fondo negro a sangre completa (galeria "Looks de la edicion"):
+   panel editorial oscuro con titulo en blanco (peticion). */
+.k-bloque-negro { background: var(--tinta); color: var(--blanco); }
+.k-bloque-negro .k-h2 { color: var(--blanco); }
+
+/* (legacy) separador manual, ya no se usa en index */
+.k-separador { border: 0; border-top: 1px solid var(--tinta); margin-block: var(--e-6); }
+
+/* ==========================================================================
+   3. TEXTURA (grano de periodico fijo - requisito "una textura")
+   No genera scroll: position fixed + pointer-events none.
+   ========================================================================== */
+.k-grano {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.06;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'>\
+<filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/></filter>\
+<rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* ==========================================================================
+   4. TIPOGRAFIA
+   ========================================================================== */
+.k-hero {
+  font-family: var(--fuente-display);
+  font-size: var(--t-hero);
+  line-height: var(--lh-hero);
+  font-weight: 900;
+  font-stretch: 125%;          /* eje expandido de Archivo */
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.k-h2 {
+  font-family: var(--fuente-display);
+  font-size: var(--t-h2);
+  line-height: var(--lh-h2);
+  font-weight: 800;
+  font-stretch: 115%;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.k-card-titulo {
+  font-family: var(--fuente-display);
+  font-size: var(--t-card);
+  font-weight: 800;
+  font-stretch: 115%;
+  text-transform: uppercase;
+  line-height: 1;
+  margin: 0;
+}
+
+/* Mono: etiquetas, precios, numeros de look, creditos, ticker */
+.k-mono {
+  font-family: var(--fuente-mono);
+  font-size: var(--t-mono);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-mono);
+}
+
+.k-acento { color: var(--rojo); }
+.k-apagado { color: var(--muted); }
+
+/* ==========================================================================
+   5. UTILIDADES DE COLLAGE
+   Todo recorte rotado vive dentro de un contenedor con overflow:hidden
+   para garantizar cero scroll horizontal (regla dura DESIGN.md).
+   ========================================================================== */
+
+/* Fantasma tipografico gigante de fondo */
+.k-fantasma {
+  font-family: var(--fuente-display);
+  font-weight: 900;
+  font-stretch: 125%;
+  text-transform: uppercase;
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 2px currentColor;
+  opacity: 0.12;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Texto de contorno (outline) */
+.k-contorno {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--tinta);
+}
+.k-contorno--rojo { -webkit-text-stroke-color: var(--rojo); }
+
+/* Cinta sobre las fotos */
+.k-cinta {
+  position: absolute;
+  z-index: 3;
+  padding: var(--e-1) var(--e-3);
+  background: var(--rojo);
+  color: var(--rojo-tinta);
+  font-family: var(--fuente-mono);
+  font-size: var(--t-mono);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-mono);
+}
+
+/* Sello rotado */
+.k-sello {
+  display: inline-block;
+  padding: var(--e-2) var(--e-3);
+  border: 2px solid var(--rojo);
+  color: var(--rojo);
+  font-family: var(--fuente-mono);
+  font-size: var(--t-mono);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-mono);
+  transform: rotate(-8deg);
+}
+
+/* Contenedor de recortes: encierra rotaciones para que no desborden */
+.k-collage {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   6. COMPONENTES
+   ========================================================================== */
+
+/* -- 6.1 Ticker / marquesina superior -- */
+/* Lenta en rojo a sangre, justo antes del bloque negro de la galeria (peticion) */
+.k-ticker {
+  background: var(--rojo);
+  color: var(--rojo-tinta);
+  overflow: hidden;
+  white-space: nowrap;
+  border-block: var(--borde);   /* enmarcado arriba y abajo (reubicado antes de la galeria) */
+}
+/* El texto antes resaltado en rojo: sobre fondo rojo va en blanco y en negrita */
+.k-ticker .k-acento { color: var(--rojo-tinta); font-weight: 700; }
+.k-ticker__pista {
+  display: inline-block;
+  padding-block: var(--e-2);
+  animation: k-marquesina 28s linear infinite;
+}
+.k-ticker__pista span { margin-inline: var(--e-5); }
+@keyframes k-marquesina {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* -- 6.2 Masthead / navbar -- */
+/* Cabecera fija al hacer scroll en las 3 paginas (peticion). z-index por
+   debajo del grano (9999) y de los overlays de Bootstrap (offcanvas 1045,
+   modal 1055), por encima del contenido. */
+.k-masthead {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  border-bottom: var(--borde);
+  background: var(--papel);
+}
+.k-marca {
+  font-family: var(--fuente-display);
+  font-weight: 900;
+  font-stretch: 125%;
+  /* logo reducido: antes ocupaba demasiado en la cabecera (peticion) */
+  font-size: clamp(18px, 2vw, 26px);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+/* En el footer el logo puede respirar mas que en la cabecera */
+.k-footer .k-marca { font-size: clamp(26px, 4vw, 44px); }
+.k-marca__punto { color: var(--rojo); }
+
+/* enlaces del nav con subrayado animado */
+.k-nav-link {
+  position: relative;
+  font-family: var(--fuente-mono);
+  font-size: var(--t-mono);
+  font-weight: 700;                /* menu mas acentuado (peticion) */
+  text-transform: uppercase;
+  letter-spacing: var(--ls-mono);
+  padding-block: var(--e-1);
+}
+.k-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%; height: 2px;
+  background: var(--rojo);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--d-corta) var(--ease);
+}
+.k-nav-link:hover::after,
+.k-nav-link[aria-current="page"]::after { transform: scaleX(1); }
+
+/* -- 6.3 Botones (TODOS con hover - requisito) -- */
+.k-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-2);
+  padding: var(--e-3) var(--e-5);
+  border: var(--borde);
+  background: var(--blanco);       /* blanco puro, sin tinte (peticion) */
+  color: var(--tinta);
+  font-family: var(--fuente-mono);
+  font-size: var(--t-mono);
+  font-weight: 700;                /* acento mas marcado (peticion) */
+  text-transform: uppercase;
+  letter-spacing: var(--ls-mono);
+  cursor: pointer;
+  border-radius: var(--radio);
+  box-shadow: var(--sombra-dura);
+  transition: transform var(--d-corta) var(--ease),
+              box-shadow var(--d-corta) var(--ease),
+              background var(--d-corta) var(--ease),
+              color var(--d-corta) var(--ease);
+}
+.k-btn:hover,
+.k-btn:focus-visible {
+  transform: translate(-3px, -3px);   /* desplazamiento DESIGN.md */
+  box-shadow: 9px 9px 0 var(--tinta);
+  color: var(--tinta);
+}
+/* Movil: todos los botones .k-btn ocupan el ancho de su contenedor */
+@media (max-width: 575px) {
+  .k-btn { width: 100%; justify-content: center; }
+  /* Excepciones: botones inline al lado del buscador (no deben empujar el input) */
+  .k-buscador .k-btn,
+  .k-cat-bar .k-btn { width: auto; }
+}
+/* Bootstrap .d-grid sin grid-template-columns deja las celdas en auto-size,
+   asi que items inline-flex se quedan al ancho del contenido. Forzamos una
+   sola columna fluida para que los botones realmente llenen el contenedor. */
+.d-grid { grid-template-columns: minmax(0, 1fr); }
+/* variante primaria roja (CTA) */
+.k-btn--rojo {
+  background: var(--rojo);
+  color: var(--rojo-tinta);
+  border-color: var(--rojo);
+}
+.k-btn--rojo:hover,
+.k-btn--rojo:focus-visible {
+  color: var(--rojo-tinta);
+  box-shadow: 9px 9px 0 var(--tinta);
+}
+
+/* -- 6.4 Filtros (pill) -- */
+.k-filtro {
+  padding: var(--e-2) var(--e-4);
+  border: var(--borde);
+  background: transparent;
+  color: var(--tinta);
+  font-family: var(--fuente-mono);
+  font-size: var(--t-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-mono);
+  cursor: pointer;
+  transition: background var(--d-corta) var(--ease),
+              color var(--d-corta) var(--ease);
+}
+.k-filtro:hover { background: var(--tinta); color: var(--papel); }
+.k-filtro[aria-pressed="true"],
+.k-filtro.is-activo {
+  background: var(--rojo);
+  color: var(--rojo-tinta);
+  border-color: var(--rojo);
+}
+
+/* -- 6.5 Card de look -- */
+.k-card {
+  position: relative;
+  background: var(--surface);
+  border: var(--borde);
+  transition: transform var(--d-media) var(--ease),
+              box-shadow var(--d-media) var(--ease);
+}
+.k-card__media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+}
+.k-card__media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform var(--d-media) var(--ease);
+}
+.k-card__cuerpo {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--e-3);
+  padding: var(--e-3) var(--e-4);
+  border-top: var(--borde);
+}
+/* hover card: endereza a 0, foto a color, sombra dura */
+.k-card:hover {
+  transform: rotate(0) translate(-3px, -3px);
+  box-shadow: var(--sombra-dura);
+  z-index: 2;
+}
+.k-card:hover .k-card__media img {
+  transform: scale(1.03);
+}
+
+/* Tarjetas ligeramente rotadas en la galeria (solo >=860px) */
+@media (min-width: 860px) {
+  .k-card--rot-a { transform: rotate(-1.5deg); }
+  .k-card--rot-b { transform: rotate(1.2deg); }
+  .k-card--rot-c { transform: rotate(0.8deg); }
+}
+
+/* -- 6.6 Tabla de anatomia (detalle) -- */
+.k-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: var(--borde);
+}
+.k-tabla th,
+.k-tabla td {
+  padding: var(--e-3) var(--e-4);
+  border-bottom: var(--borde-fino);
+  text-align: left;
+}
+.k-tabla__precio { font-family: var(--fuente-mono); text-align: right; white-space: nowrap; }
+.k-tabla__total td {
+  border-top: var(--borde);
+  border-bottom: 0;
+  font-family: var(--fuente-display);
+  font-weight: 800;
+  font-size: var(--t-card);
+  text-transform: uppercase;
+}
+
+/* Marcador numerado sobre la foto de anatomia */
+.k-marcador {
+  position: absolute;
+  width: 28px; height: 28px;
+  display: grid; place-items: center;
+  background: var(--rojo);
+  color: var(--rojo-tinta);
+  font-family: var(--fuente-mono);
+  font-size: 13px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* -- 6.7 Carousel (Bootstrap) brutalizado -- */
+.k-carrusel {
+  border: var(--borde);
+  box-shadow: var(--sombra-dura);
+  background: var(--surface);
+}
+.k-carrusel .carousel-item img {
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+/* Panel de texto del slide: caja solida legible, no texto flotante */
+.k-carrusel__cap {
+  position: absolute;
+  left: var(--e-5);
+  bottom: var(--e-5);
+  max-width: min(90%, 360px);
+  padding: var(--e-4);
+  background: var(--surface);
+  border: var(--borde);
+  box-shadow: var(--sombra-dura-rojo);
+  text-align: left;
+}
+/* Controles e indicadores en tinta (sobre fondo claro) */
+.k-carrusel .carousel-control-prev,
+.k-carrusel .carousel-control-next { width: 12%; }
+.k-carrusel .carousel-control-prev-icon,
+.k-carrusel .carousel-control-next-icon {
+  background-color: var(--tinta);
+  border-radius: 0;
+  padding: var(--e-4);
+  background-size: 50%;
+}
+.k-carrusel .carousel-indicators [data-bs-target] {
+  width: 14px; height: 14px;
+  border: var(--borde-fino);
+  border-radius: 50%;
+  background: transparent;
+  opacity: 1;
+}
+.k-carrusel .carousel-indicators .active { background: var(--rojo); border-color: var(--rojo); }
+
+/* -- 6.8 Plancha del quiz + fantasma -- */
+/* La seccion se eleva (z-index) para que las fotos puedan salirse y quedar
+   por encima de los bloques vecinos. overflow visible permite ese desborde;
+   el fantasma se recorta aparte para no generar scroll horizontal. */
+.k-tipo-sec { position: relative; z-index: 3; }
+.k-plancha {
+  position: relative;
+  background: var(--rojo);
+  color: var(--rojo-tinta);
+  padding-block: clamp(56px, 9vw, 96px);   /* +1.5x respecto a e-8 (peticion) */
+}
+.k-plancha .k-mono { color: var(--rojo-tinta); }
+.k-plancha__titulo { color: var(--rojo-tinta); }
+/* sobre rojo la descripcion va clara (mejor contraste que negro puro) */
+.k-plancha .k-desc { color: var(--rojo-tinta); }
+.k-plancha__fantasma {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  max-width: 100%;
+  overflow: hidden;
+  transform: translateY(-50%);
+  font-size: clamp(80px, 20vw, 300px);
+  color: var(--rojo-tinta);
+  -webkit-text-stroke-color: var(--rojo-tinta);
+  opacity: 0.18;
+  z-index: 0;
+}
+
+/* -- 6.9 Accordion (Bootstrap) brutalizado -- */
+/* Sin marco ni fondo: solo una linea fina negra que separa cada pregunta. */
+.k-acordeon .accordion-item {
+  background: transparent;
+  border: 0;
+  border-bottom: var(--borde-fino);
+}
+.k-acordeon .accordion-item:first-child { border-top: var(--borde-fino); }
+.k-acordeon .accordion-button {
+  background: transparent;
+  color: var(--tinta);
+  font-family: var(--fuente-display);
+  font-weight: 800;
+  font-stretch: 115%;
+  font-size: clamp(13px, 1.5vw, 15px);   /* preguntas mas pequenas (peticion) */
+  text-transform: uppercase;
+  border-radius: 0;
+  box-shadow: none;
+}
+.k-acordeon .accordion-button:not(.collapsed) {
+  background: transparent;
+  color: var(--tinta);
+}
+/* el cuerpo tampoco lleva fondo, solo el texto */
+.k-acordeon .accordion-body { background: transparent; padding-inline: 0; }
+.k-acordeon .accordion-button { padding-inline: 0; }
+/* lineas de division rectas: sin el redondeo que Bootstrap pone arriba y abajo */
+.k-acordeon,
+.k-acordeon .accordion-item,
+.k-acordeon .accordion-item:first-child,
+.k-acordeon .accordion-item:last-child,
+.k-acordeon .accordion-item:first-child .accordion-button,
+.k-acordeon .accordion-item:last-child .accordion-button { border-radius: 0; }
+.k-acordeon .accordion-button:focus {
+  box-shadow: none;
+  border-color: var(--rojo);
+}
+.k-acordeon .accordion-button::after {
+  /* flecha en color tinta, sin imagen externa */
+  background-image: none;
+  content: "+";
+  font-family: var(--fuente-mono);
+  font-size: 24px;
+  width: auto; height: auto;
+  display: grid; place-items: center;
+  transform: none;
+}
+.k-acordeon .accordion-button:not(.collapsed)::after { content: "\2212"; } /* signo menos */
+
+/* -- 6.10 Footer (igual en las 3 paginas) -- */
+.k-footer {
+  border-top: var(--borde);
+  background: var(--tinta);
+  color: var(--papel);
+  padding-block: var(--e-7);
+}
+.k-footer a:hover { color: var(--rojo); }
+.k-redes a {
+  display: inline-grid;
+  place-items: center;
+  width: 40px; height: 40px;
+  border: 2px solid var(--papel);
+  transition: background var(--d-corta) var(--ease),
+              color var(--d-corta) var(--ease),
+              transform var(--d-corta) var(--ease);
+}
+.k-redes a:hover {
+  background: var(--rojo);
+  border-color: var(--rojo);
+  color: var(--rojo-tinta);
+  transform: translate(-2px, -2px);
+}
+
+/* -- 6.11 Botones-icono de la cabecera (cuenta, cesta, tema) -- */
+.k-iconbtn {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 42px; height: 42px;
+  border: var(--borde);
+  background: var(--blanco);
+  color: var(--tinta);
+  cursor: pointer;
+  transition: transform var(--d-corta) var(--ease),
+              background var(--d-corta) var(--ease),
+              color var(--d-corta) var(--ease);
+}
+.k-iconbtn:hover,
+.k-iconbtn:focus-visible {
+  background: var(--rojo);
+  border-color: var(--rojo);
+  color: var(--rojo-tinta);
+  transform: translate(-2px, -2px);
+}
+/* Badge contador de la cesta */
+.k-cesta-badge {
+  position: absolute;
+  top: -8px; right: -8px;
+  min-width: 20px; height: 20px;
+  padding: 0 5px;
+  display: grid; place-items: center;
+  background: var(--rojo);
+  color: var(--rojo-tinta);
+  border: var(--borde-fino);
+  font-family: var(--fuente-mono);
+  font-size: 11px;
+  line-height: 1;
+}
+
+/* -- 6.12 Polaroids del hero -- */
+.k-polaroids {
+  position: relative;
+  min-height: 360px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.k-polaroid {
+  width: clamp(150px, 40vw, 210px);
+  margin: 0;
+  padding: var(--e-2) var(--e-2) var(--e-3);
+  background: var(--surface);
+  border: var(--borde);
+  box-shadow: var(--sombra-dura);
+  transition: transform var(--d-media) var(--ease), box-shadow var(--d-media) var(--ease);
+}
+.k-polaroid img { aspect-ratio: 3 / 4; object-fit: cover; width: 100%; }
+.k-polaroid__pie { display: block; text-align: center; margin-top: var(--e-2); color: var(--muted); }
+/* En pantallas anchas se solapan y rotan; en movil se apilan rectos */
+@media (min-width: 992px) {
+  .k-polaroid { position: absolute; }
+  .k-polaroid--1 { transform: rotate(-7deg) translate(-58%, 6%); z-index: 1; }
+  .k-polaroid--2 { transform: rotate(3deg)  translate(0, -8%);   z-index: 3; }
+  .k-polaroid--3 { transform: rotate(8deg)  translate(58%, 10%); z-index: 2; }
+  .k-polaroid--1:hover, .k-polaroid--2:hover, .k-polaroid--3:hover { z-index: 4; }
+  .k-polaroid--1:hover { transform: rotate(-7deg) translate(-58%, 6%) scale(1.04); }
+  .k-polaroid--2:hover { transform: rotate(3deg)  translate(0, -8%)   scale(1.04); }
+  .k-polaroid--3:hover { transform: rotate(8deg)  translate(58%, 10%) scale(1.04); }
+}
+@media (max-width: 991.98px) {
+  .k-polaroids { flex-wrap: wrap; gap: var(--e-4); }
+  .k-polaroid--2 { transform: rotate(-2deg); }
+}
+.k-polaroids__sello {
+  position: absolute;
+  bottom: 0; right: var(--e-5);
+  z-index: 5;
+  background: var(--rojo);
+  color: var(--rojo-tinta);
+}
+
+/* -- 6.13 Panel offcanvas (cesta y cuenta) brutalizado -- */
+.k-panel.offcanvas {
+  background: var(--papel);
+  color: var(--tinta);
+  border-left: var(--borde);
+  width: min(420px, 92vw);
+}
+.k-panel .offcanvas-header { border-bottom: var(--borde); }
+.k-panel .offcanvas-title {
+  font-family: var(--fuente-display);
+  font-weight: 800;
+  font-stretch: 115%;
+  text-transform: uppercase;
+  font-size: var(--t-card);
+}
+.k-panel .btn-close { filter: none; opacity: 1; }
+.k-panel__vacio { color: var(--muted); padding-block: var(--e-6); text-align: center; }
+
+/* -- Menu principal (movil): offcanvas a pantalla completa con cabecera marca + cerrar -- */
+@media (max-width: 991.98px) {
+  .k-menu-panel.offcanvas-lg {
+    background: var(--papel);
+    color: var(--tinta);
+    border-right: var(--borde);
+    width: 100vw !important;
+    max-width: 100vw;
+    height: 100vh;
+    z-index: 1045;
+  }
+  .k-menu-panel .offcanvas-header {
+    border-bottom: var(--borde);
+    padding: var(--e-3) var(--e-4);
+  }
+  .k-menu-panel .offcanvas-body {
+    padding: var(--e-5) var(--e-4);
+    display: flex; flex-direction: column;
+    gap: var(--e-5);
+  }
+  .k-menu-panel .navbar-nav {
+    display: flex; flex-direction: column;
+    gap: var(--e-3);
+    margin: 0;
+  }
+  .k-menu-panel .k-nav-link {
+    font-family: var(--fuente-display);
+    font-weight: 800; font-stretch: 115%;
+    text-transform: uppercase;
+    font-size: clamp(22px, 6vw, 32px);
+    line-height: 1.1;
+    padding: var(--e-2) 0;
+  }
+  .k-menu-panel .k-menu-extra { margin-top: auto; }
+}
+/* Desktop: el offcanvas-lg actua como flex inline; sin padding interno */
+@media (min-width: 992px) {
+  .k-menu-panel .offcanvas-body { padding: 0; }
+}
+
+/* Linea de articulo en cesta / tablero */
+.k-linea {
+  display: flex;
+  gap: var(--e-3);
+  padding: var(--e-3) 0;
+  border-bottom: var(--borde-fino);
+  align-items: center;
+}
+.k-linea img { width: 56px; height: 72px; object-fit: cover; border: var(--borde-fino); }
+.k-linea__info { flex: 1; min-width: 0; }
+.k-linea__quitar {
+  border: 0; background: none; color: var(--muted);
+  cursor: pointer; padding: 6px;
+  display: inline-grid; place-items: center;
+  transition: color var(--d-corta) var(--ease), transform var(--d-corta) var(--ease);
+}
+.k-linea__quitar:hover,
+.k-linea__quitar:focus-visible { color: var(--rojo); transform: scale(1.1); }
+.k-linea__quitar svg { display: block; }
+/* Precio de cada linea de la cesta: jerarquia visual mas fuerte */
+.k-linea__precio { font-weight: 700; color: var(--tinta); }
+.k-panel__total {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding-top: var(--e-4); margin-top: var(--e-3);
+  border-top: var(--borde);
+  font-family: var(--fuente-display); font-weight: 800; text-transform: uppercase;
+}
+
+/* Modal (Bootstrap) brutalizado */
+.k-modal__content {
+  background: var(--papel);
+  color: var(--tinta);
+  border: var(--borde);
+  border-radius: 0;
+  box-shadow: var(--sombra-dura);
+}
+.k-modal .modal-header { border-bottom: var(--borde); }
+
+/* -- 6.14 Acciones de la card (like, guardar/pin, cesta) -- */
+.k-acciones {
+  position: absolute;
+  top: var(--e-2); right: var(--e-2);
+  z-index: 4;
+  display: flex; flex-direction: column; gap: var(--e-2);
+}
+/* La revelacion pasa al boton (no al cluster): asi un boton activo puede
+   quedarse visible aunque los demas esten ocultos. */
+.k-accion {
+  display: grid; place-items: center;
+  width: 34px; height: 34px;
+  border: var(--borde-fino);
+  background: var(--blanco);
+  color: var(--tinta);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateX(8px);
+  transition: opacity var(--d-corta) var(--ease), transform var(--d-corta) var(--ease),
+              background var(--d-micro) var(--ease), color var(--d-micro) var(--ease);
+}
+.k-card:hover .k-accion,
+.k-card:focus-within .k-accion { opacity: 1; transform: none; }
+.k-accion:hover { transform: translate(-1px, -1px); background: var(--tinta); color: var(--papel); }
+.k-accion svg { width: 17px; height: 17px; }
+/* Estados activos (like / guardado): rojo con relleno Y se quedan visibles tras
+   el clic, para que el efecto de seleccion se vea al instante (peticion). */
+.k-accion[aria-pressed="true"] {
+  opacity: 1; transform: none;
+  background: var(--rojo); border-color: var(--rojo); color: var(--rojo-tinta);
+}
+.k-accion[aria-pressed="true"] svg { fill: currentColor; }
+/* En tactil (sin hover) siempre visibles para no esconder funciones */
+@media (hover: none) {
+  .k-accion { opacity: 1; transform: none; }
+}
+
+/* Pie de card con precio del look + accion de cesta */
+/* Precio de la card: numero grande + meta pequena (cantidad de prendas) */
+.k-card__precio {
+  display: flex; align-items: baseline; gap: var(--e-2);
+  flex-wrap: wrap;
+  margin: 0;
+}
+.k-card__precio-num {
+  font-family: var(--fuente-display); font-weight: 800; font-stretch: 115%;
+  font-size: clamp(16px, 3.4vw, 22px);
+  line-height: 1;
+  color: var(--tinta);
+}
+.k-card__precio-meta {
+  font-family: var(--fuente-mono);
+  font-size: 10px; text-transform: uppercase; letter-spacing: var(--ls-mono);
+  color: var(--muted);
+  white-space: nowrap;
+}
+.k-card__cesta {
+  margin-top: var(--e-2);
+  width: 100%;
+  justify-content: center;
+}
+
+/* -- 6.15 Filtros: grupos por ocasion y por tipo (multiseleccion) -- */
+.k-filtros__grupo { margin-bottom: var(--e-4); }
+.k-filtros__et { display: block; margin-bottom: var(--e-2); color: var(--muted); }
+
+/* -- 6.16 Test de tipo (determinar tipaje) -- */
+.k-test {
+  background: var(--surface);
+  border: var(--borde);
+  box-shadow: var(--sombra-dura);
+  padding: clamp(var(--e-5), 4vw, var(--e-7));
+}
+.k-test__opciones { display: grid; gap: var(--e-3); grid-template-columns: 1fr; }
+@media (min-width: 640px) { .k-test__opciones { grid-template-columns: repeat(3, 1fr); } }
+.k-test__op {
+  text-align: left;
+  padding: var(--e-4);
+  border: var(--borde);
+  background: var(--papel);
+  cursor: pointer;
+  transition: transform var(--d-corta) var(--ease), box-shadow var(--d-corta) var(--ease);
+}
+.k-test__op:hover, .k-test__op:focus-visible { transform: translate(-3px, -3px); box-shadow: var(--sombra-dura); }
+.k-test__op[aria-pressed="true"] { background: var(--rojo); color: var(--rojo-tinta); border-color: var(--rojo); }
+.k-test__resultado { margin-top: var(--e-5); padding-top: var(--e-5); border-top: var(--separador); }
+
+/* -- 6.17 Barra de busqueda + filtros -- */
+.k-buscador { background: var(--tinta); padding-block: var(--e-3); }
+.k-buscador .k-contenedor { padding-block: 0; }
+.k-buscador__form {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.k-buscador__lupa { position: absolute; left: var(--e-3); color: var(--muted); pointer-events: none; }
+.k-buscador__input {
+  width: 100%;
+  padding: var(--e-2) var(--e-3) var(--e-2) calc(var(--e-3) * 2.4);
+  border: var(--borde-fino);
+  border-color: var(--papel);
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--t-cuerpo);
+}
+.k-buscador__input::placeholder { color: var(--muted); }
+.k-buscador__input:focus { outline: 2px solid var(--rojo); outline-offset: 0; }
+.k-buscador__filtros { box-shadow: none; flex-shrink: 0; }
+
+/* Checkboxes del panel de filtros */
+.k-fset { border: 0; padding: 0; margin: 0 0 var(--e-5); }
+.k-fset__leg { color: var(--muted); margin-bottom: var(--e-2); }
+.k-check {
+  display: flex; align-items: center; gap: var(--e-2);
+  padding: var(--e-1) 0;
+  cursor: pointer;
+}
+.k-check input { width: 18px; height: 18px; accent-color: var(--rojo); flex-shrink: 0; }
+
+/* -- 6.18 Portada: collage de 3 recortes + stickers (sin tapar el texto) -- */
+.k-portada { padding-block: clamp(32px, 5vw, 48px); }   /* +1.5x respecto a e-6 (peticion) */
+.k-scrap {
+  position: absolute;
+  margin: 0;
+  border: var(--e-2) solid var(--surface);   /* marco tipo recorte */
+  box-shadow: var(--sombra-dura);
+  overflow: hidden;
+}
+.k-scrap img { width: 100%; height: 100%; object-fit: cover; }
+
+/* MOVIL (base): collage de 3 recortes superpuestos y rotados (sin grid),
+   las fotos van antes del titulo (orden en el HTML). */
+.k-portada__collage { position: relative; min-height: clamp(340px, 88vw, 520px); }
+.k-scrap--1 { width: 56%; aspect-ratio: 3/4; top: 0;     left: 2%;   transform: rotate(-5deg); z-index: 2; }
+.k-scrap--2 { width: 52%; aspect-ratio: 3/4; top: 10%;   right: 2%;  transform: rotate(5deg);  z-index: 3; }
+.k-scrap--3 { width: 48%; aspect-ratio: 3/4; bottom: 0;  left: 26%;  transform: rotate(-2deg); z-index: 4; }
+
+/* DESKTOP: collage de 3 fotos de tamanos distintos, superpuestas y rotadas
+   (efecto recorte de zine). Viven dentro de col-lg-7, separadas del texto. */
+@media (min-width: 992px) {
+  .k-portada__collage { min-height: clamp(420px, 33vw, 500px); }
+  .k-scrap--1 { display: block; width: 50%; aspect-ratio: 3/4; top: 0;    left: 0;   transform: rotate(-5deg); z-index: 2; }
+  .k-scrap--2 { display: block; width: 42%; aspect-ratio: 3/4; top: 13%;  right: 3%; transform: rotate(5deg);  z-index: 4; }
+  .k-scrap--3 { display: block; width: 37%; aspect-ratio: 3/4; bottom: 0; left: 31%; transform: rotate(-2deg); z-index: 3; }
+}
+
+/* -- 6.19 Demo "como funciona": foto con marcadores animados -- */
+.k-demo { position: relative; margin: 0; border: var(--borde); box-shadow: var(--sombra-dura); }
+/* Las fotos de los bloques "Looks completos" y "Elegi tu tipaje" comparten el
+   mismo tamano y orientacion HORIZONTAL (3/2) en todos los anchos (peticion).
+   destacado-* ya es 3/2 (encaja sin recorte); el rostro 3/4 recorta a banda central. */
+.k-demo img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; object-position: center; }
+.k-demo__mk {
+  position: absolute;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity var(--d-media) var(--ease), transform var(--d-media) var(--ease);
+}
+.k-demo.is-visible .k-demo__mk { opacity: 1; transform: none; }
+.k-demo.is-visible .k-demo__mk--1 { transition-delay: 120ms; }
+.k-demo.is-visible .k-demo__mk--2 { transition-delay: 260ms; }
+.k-demo.is-visible .k-demo__mk--3 { transition-delay: 400ms; }
+.k-demo.is-visible .k-demo__mk--4 { transition-delay: 540ms; }
+.k-demo__mk { width: 0; height: 0; }
+/* Posiciones base (bloque "Looks completos") sobre la foto de dos looks lado a lado:
+   mujer de la izquierda con abrigo rojo y vestido rosa; mujer de la derecha con
+   chaqueta de pelo marron y vaqueros anchos. */
+.k-demo__mk--1 { top: 55%; left: 26%; }   /* abrigo de lana - mujer izda */
+.k-demo__mk--2 { top: 72%; left: 33%; }   /* vestido lencero rosa */
+.k-demo__mk--3 { top: 42%; left: 70%; }   /* chaqueta de pelo - mujer dcha */
+.k-demo__mk--4 { top: 80%; left: 72%; }   /* vaqueros anchos */
+/* Variante "rasgos del tipaje": misma mecanica, posiciones sobre el rostro
+   (foto recortada en 3/2, banda central del retrato). Las marcas caen sobre
+   ojos, nariz, labios y un mechon de pelo ondulado. */
+.k-demo--rasgos .k-demo__mk--1 { top: 42%; left: 55%; }   /* mirada serena */
+.k-demo--rasgos .k-demo__mk--2 { top: 60%; left: 50%; }   /* nariz suave */
+.k-demo--rasgos .k-demo__mk--3 { top: 78%; left: 50%; }   /* labios carnosos */
+.k-demo--rasgos .k-demo__mk--4 { top: 35%; left: 18%; }   /* cabello ondulado */
+/* punto pulsante */
+.k-demo__pt {
+  position: absolute; left: 0; top: 0;
+  width: 26px; height: 26px;
+  border: 2px solid var(--rojo-tinta);
+  background: var(--rojo);
+  border-radius: 50%;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 0 rgba(172, 39, 68, 0.5);
+  animation: k-pulso 2.2s ease-out infinite;
+}
+@keyframes k-pulso {
+  0% { box-shadow: 0 0 0 0 rgba(172, 39, 68, 0.5); }
+  70% { box-shadow: 0 0 0 14px rgba(172, 39, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(172, 39, 68, 0); }
+}
+/* popover con nombre + precio + icono cesta */
+.k-demo__pop {
+  position: absolute;
+  left: 0; bottom: 16px;
+  transform: translateX(-50%) translateY(6px);
+  display: flex; align-items: center; gap: var(--e-2);
+  white-space: nowrap;
+  padding: var(--e-2) var(--e-3);
+  background: var(--surface);
+  border: var(--borde);
+  box-shadow: var(--sombra-dura);
+  font-family: var(--fuente-mono);
+  font-size: var(--t-mono);
+  opacity: 0; pointer-events: none;
+  transition: opacity var(--d-corta) var(--ease), transform var(--d-corta) var(--ease);
+}
+.k-demo__pop b { color: var(--rojo); }
+.k-demo__mk:hover .k-demo__pop,
+.k-demo__pt:focus-visible ~ .k-demo__pop { opacity: 1; transform: translateX(-50%); }
+
+/* -- 6.20 Galeria collage: 3 por linea, denso, con naclones variados -- */
+/* gap horizontal corto entre tarjetas (peticion), vertical mas holgado */
+.k-board { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: var(--e-3); row-gap: var(--e-5); align-items: start; }
+.k-look { padding: 12px; cursor: pointer; }   /* espaciado interno 12px (peticion) */
+/* mismo grosor de marco en la foto que en la tarjeta (peticion) */
+.k-look .k-card__media { border: var(--borde); }
+/* altura flexible: la tarjeta crece segun su contenido y se adapta a cada
+   variante responsiva (peticion). Sin altura fija ni scroll interno de tags. */
+/* texto de la tarjeta en negro (no hereda el claro del bloque rojo) - peticion */
+.k-look__info { display: flex; flex-direction: column; padding: 12px 0 0; color: var(--negro); }
+.k-tags {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: var(--e-2);
+  align-content: flex-start;
+}
+/* Todos los tags al mismo estilo: blanco puro + contorno fino negro, angulos
+   rectos, fuente mono fina y mismo tamano (peticion de unificacion) */
+.k-tag {
+  font-family: var(--fuente-mono); font-weight: 400; font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 7px; border: var(--borde-fino); border-radius: var(--radio);
+  background: var(--blanco); color: var(--tinta);
+}
+.k-card__compo {
+  color: var(--muted); font-size: 11px;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+  overflow: hidden;   /* 2 lineas max para no romper la altura fija de la tarjeta */
+}
+/* Tarjetas mas pequenas y con mas inclinacion (peticion), todas del mismo
+   formato y alineadas a una sola linea horizontal (sin escalonado). */
+@media (min-width: 768px) {
+  .k-look { width: 92%; justify-self: center; }
+  .k-look:nth-child(1) { transform: rotate(-4deg); }
+  .k-look:nth-child(2) { transform: rotate(3deg); }
+  .k-look:nth-child(3) { transform: rotate(-3deg); }
+  .k-look:nth-child(4) { transform: rotate(4deg); }
+  .k-look:nth-child(5) { transform: rotate(-3.5deg); }
+  .k-look:nth-child(6) { transform: rotate(2.5deg); }
+  .k-board .k-look:hover { transform: translate(-3px, -3px) rotate(0); box-shadow: var(--sombra-dura); z-index: 5; }
+}
+/* tablet: 2 col */
+@media (min-width: 561px) and (max-width: 767.98px) {
+  .k-board { grid-template-columns: 1fr 1fr; gap: var(--e-4); }
+}
+/* movil: 1 col */
+@media (max-width: 560px) {
+  .k-board { grid-template-columns: 1fr; }
+}
+
+/* -- 6.20b Carrusel editorial (componente Bootstrap Carousel) -- */
+.k-editorial { padding-block: var(--e-7); }
+.k-editorial__car {
+  position: relative;
+  border: var(--borde);
+  box-shadow: var(--sombra-dura);
+  overflow: hidden;
+  background: var(--surface);
+}
+.k-editorial__foto {
+  width: 100%;
+  height: clamp(420px, 70vh, 720px);
+  object-fit: cover;
+  object-position: center;
+}
+.k-editorial__cap {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: var(--e-5) var(--e-5) var(--e-6);
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.78));
+  color: var(--papel);
+  z-index: 2;
+}
+.k-editorial__num {
+  display: block; margin-bottom: var(--e-2);
+  color: var(--papel); opacity: 0.85;
+}
+.k-editorial__nombre {
+  font-family: var(--fuente-display);
+  font-weight: 800; font-stretch: 115%;
+  text-transform: uppercase;
+  font-size: clamp(28px, 5vw, 64px);
+  line-height: 1;
+  margin: 0 0 var(--e-2);
+  color: var(--papel);
+}
+.k-editorial__meta { color: var(--papel); opacity: 0.85; margin: 0; }
+/* Indicadores tipo barra fina, esquinas rectas, color rojo cuando activo */
+.k-editorial__ind { bottom: auto; top: var(--e-3); margin: 0 var(--e-5); }
+.k-editorial__ind [data-bs-target] {
+  width: 28px; height: 4px; border: 0; border-radius: 0;
+  background: rgba(255, 255, 255, 0.55);
+  transition: background var(--d-corta) var(--ease);
+}
+.k-editorial__ind [data-bs-target].active { background: var(--rojo); }
+/* Flechas: cuadradas, fondo blanco con borde, no circulares */
+.k-editorial__ctrl { width: 64px; opacity: 1; }
+.k-editorial__ctrl .carousel-control-prev-icon,
+.k-editorial__ctrl .carousel-control-next-icon {
+  width: 44px; height: 44px;
+  background-color: var(--blanco);
+  border: var(--borde);
+  background-size: 22px 22px;
+  transition: box-shadow var(--d-corta) var(--ease), transform var(--d-corta) var(--ease);
+}
+.k-editorial__ctrl:hover .carousel-control-prev-icon,
+.k-editorial__ctrl:hover .carousel-control-next-icon,
+.k-editorial__ctrl:focus-visible .carousel-control-prev-icon,
+.k-editorial__ctrl:focus-visible .carousel-control-next-icon {
+  transform: translate(-2px, -2px);
+  box-shadow: 9px 9px 0 var(--tinta);
+}
+/* Iconos de las flechas en color tinta (Bootstrap los pinta blancos por defecto) */
+.k-editorial__ctrl .carousel-control-prev-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23141210' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m15 5-7 7 7 7'/%3E%3C/svg%3E");
+}
+.k-editorial__ctrl .carousel-control-next-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23141210' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 5 7 7-7 7'/%3E%3C/svg%3E");
+}
+@media (max-width: 600px) {
+  .k-editorial__cap { padding: var(--e-3) var(--e-3) var(--e-4); }
+  .k-editorial__ctrl { width: 48px; }
+}
+
+/* -- 6.21 CTA a pantalla completa - fondo gris placeholder (luego video), texto centrado a una linea -- */
+.k-bleed {
+  position: relative; width: 100%;
+  min-height: clamp(300px, 45vh, 460px);
+  display: grid; place-items: center;
+  overflow: hidden;
+  background: #c7c2b6;   /* placeholder gris; aqui ira un video */
+}
+.k-bleed__cara { position: relative; z-index: 2; width: 100%; }
+.k-bleed__titulo {
+  color: var(--tinta);
+  font-family: var(--fuente-display);
+  font-weight: 800; font-stretch: 115%;
+  text-transform: uppercase;
+  font-size: clamp(20px, 3.4vw, 44px);
+  line-height: 1;
+  white-space: nowrap;   /* todo el texto en una sola linea */
+}
+@media (max-width: 600px) { .k-bleed__titulo { white-space: normal; } }
+
+/* boton invertido (sobre plancha roja) - tambien blanco puro */
+.k-btn--invertido { background: var(--blanco); color: var(--tinta); border-color: var(--blanco); }
+.k-btn--invertido:hover, .k-btn--invertido:focus-visible { background: var(--tinta); color: var(--papel); box-shadow: 9px 9px 0 rgba(0,0,0,0.35); }
+
+/* utilidad: parrafo centrado con ancho de medida */
+.k-centrado { margin-inline: auto; }
+
+/* -- 6.21b Collage de tipos (bloque IA): 2 rostros con etiqueta de tipaje -- */
+.k-tipos { position: relative; min-height: 380px; }
+.k-tipos__foto {
+  margin: 0;
+  border: var(--e-2) solid var(--surface);
+  box-shadow: var(--sombra-dura);
+  overflow: hidden;
+}
+.k-tipos__foto img { width: 100%; aspect-ratio: 3/4; object-fit: cover; object-position: top center; }
+.k-tipos__tag {
+  position: absolute; left: var(--e-2); bottom: var(--e-2);
+  background: var(--tinta); color: var(--papel);
+  padding: 3px 9px;
+}
+@media (min-width: 992px) {
+  /* Las fotos sobresalen del plano rojo (arriba y abajo) y flotan sobre los vecinos */
+  .k-tipos { min-height: 300px; }
+  .k-tipos__foto { position: absolute; width: 54%; }
+  .k-tipos__foto--1 { top: -96px;    left: 0;  transform: rotate(-4deg); z-index: 6; }
+  .k-tipos__foto--2 { bottom: -96px; right: 0; transform: rotate(4deg);  z-index: 5; }
+}
+@media (max-width: 991.98px) {
+  /* Movil: collage de las dos fotos solapadas entre si, pero CONTENIDAS dentro
+     del bloque (sin bleed vertical) para no montarse sobre el texto ni el boton. */
+  .k-tipos { position: relative; min-height: clamp(360px, 96vw, 520px); display: block; }
+  .k-tipos__foto { position: absolute; width: 62%; }
+  .k-tipos__foto--1 { top: 0;    left: 0;  transform: rotate(-5deg); z-index: 6; }
+  .k-tipos__foto--2 { bottom: 0; right: 0; transform: rotate(5deg);  z-index: 5; }
+}
+
+/* -- 6.22 Tendencias: carrusel de cuadrados con flechas (scroll de 1 en 1) -- */
+.k-trend-wrap { position: relative; display: flex; align-items: center; gap: var(--e-3); }
+.k-trend {
+  display: flex; gap: var(--e-5);
+  flex: 1; min-width: 0;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-block: var(--e-4);   /* aire para los naclones */
+  scrollbar-width: none;
+}
+.k-trend::-webkit-scrollbar { display: none; }
+.k-trend__item {
+  position: relative; margin: 0; overflow: hidden;
+  flex: 0 0 clamp(220px, 60vw, 300px);   /* ancho fijo de tarjeta */
+  scroll-snap-align: start;
+  border: var(--borde); box-shadow: var(--sombra-dura);
+  aspect-ratio: 1 / 1;     /* todos cuadrados del mismo tamano */
+  transition: transform var(--d-corta) var(--ease);
+}
+/* flechas de navegacion: rojas de inicio, con el mismo hover que el CTA rojo
+   del bloque 1 (desplazamiento -3,-3 + sombra dura en tinta) */
+.k-trend-nav {
+  flex: 0 0 auto;
+  display: grid; place-items: center;
+  width: 46px; height: 46px;
+  border: 2px solid var(--rojo);
+  background: var(--rojo);
+  color: var(--rojo-tinta);
+  cursor: pointer;
+  box-shadow: var(--sombra-dura);
+  transition: transform var(--d-corta) var(--ease), box-shadow var(--d-corta) var(--ease);
+}
+.k-trend-nav:hover, .k-trend-nav:focus-visible {
+  color: var(--rojo-tinta);
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 var(--tinta);
+}
+.k-trend__item img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--d-media) var(--ease); }
+.k-trend__item:hover img { transform: scale(1.05); }
+/* naclones distintos por tarjeta */
+.k-trend--a { transform: rotate(-3deg); }
+.k-trend--b { transform: rotate(2deg); }
+.k-trend--c { transform: rotate(-2deg); }
+.k-trend--d { transform: rotate(3deg); }
+.k-trend__item:hover { transform: rotate(0) translate(-3px, -3px); z-index: 3; }
+.k-trend__cap {
+  position: absolute; left: var(--e-2); bottom: var(--e-2); z-index: 2;
+  background: var(--tinta); color: var(--papel);
+  padding: 3px 8px;
+}
+.k-trend__buscar {
+  position: absolute; inset: 0; z-index: 3;
+  display: grid; place-items: center;
+  background: rgba(172, 39, 68, 0.0);
+  color: transparent;
+  transition: background var(--d-corta) var(--ease), color var(--d-corta) var(--ease);
+}
+.k-trend__item:hover .k-trend__buscar,
+.k-trend__item:focus-within .k-trend__buscar { background: rgba(172, 39, 68, 0.82); color: var(--rojo-tinta); }
+.k-trend__buscar svg { transform: scale(1.6); }
+
+/* -- 6.24 Catalogo (productos.html): migas + buscador + chips + rejilla +
+   paginacion. Reutiliza .k-card / .k-card__media / .k-tags / .k-card__compo.
+   A diferencia de la galeria del index (.k-board) NO hay rotacion: rejilla
+   ordenada y filtrable. El filtrado lo aplica js/principal.js (iniciarCatalogo)
+   ocultando cada columna [data-prod] segun los checkboxes del offcanvas. */
+
+/* Migas de pan (sustituyen al titulo de pagina) */
+.k-miga { margin-bottom: var(--e-3); }
+.k-miga ol { list-style: none; display: flex; flex-wrap: wrap; gap: var(--e-2); margin: 0; padding: 0; }
+.k-miga li {
+  display: flex; align-items: center; gap: var(--e-2); color: var(--muted);
+  font-family: var(--fuente-mono); font-size: var(--t-mono);
+  text-transform: uppercase; letter-spacing: var(--ls-mono);
+}
+.k-miga li + li::before { content: "/"; color: var(--muted); }
+.k-miga a:hover { color: var(--rojo); }
+.k-miga [aria-current="page"] { color: var(--tinta); }
+
+/* Barra de busqueda + filtros + total (formato de busqueda, sin titulo) */
+.k-cat-bar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--e-3);
+  margin-bottom: var(--e-4);
+}
+.k-cat-search { position: relative; flex: 1 1 240px; display: flex; align-items: center; }
+.k-cat-search__lupa { position: absolute; left: var(--e-3); color: var(--muted); pointer-events: none; }
+.k-cat-search__input {
+  width: 100%;
+  padding: var(--e-3) var(--e-3) var(--e-3) calc(var(--e-3) * 2.6);
+  border: var(--borde); background: var(--blanco); color: var(--tinta);
+  font-family: var(--fuente-cuerpo); font-size: var(--t-cuerpo); border-radius: var(--radio);
+}
+.k-cat-search__input::placeholder { color: var(--muted); }
+.k-cat-search__input:focus { outline: 2px solid var(--rojo); outline-offset: 2px; }
+.k-cat-bar .k-btn { box-shadow: none; flex-shrink: 0; }
+.k-cat-bar__count {
+  margin: 0; color: var(--muted);
+  font-family: var(--fuente-mono); font-size: var(--t-mono);
+  text-transform: uppercase; letter-spacing: var(--ls-mono);
+}
+.k-cat-bar__count b { color: var(--rojo); }
+
+/* Chips de filtros activos: se muestran ANTES de las cards al filtrar (peticion) */
+.k-cat-chips { display: flex; flex-wrap: wrap; gap: var(--e-2); margin-bottom: var(--e-5); }
+.k-cat-chips:empty { display: none; }
+.k-chip {
+  display: inline-flex; align-items: center; gap: var(--e-2);
+  padding: 3px 6px 3px 10px;
+  background: var(--rojo); color: var(--rojo-tinta); border: var(--borde-fino); border-color: var(--rojo);
+  font-family: var(--fuente-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.k-chip__x {
+  display: grid; place-items: center; width: 16px; height: 16px;
+  border: 0; background: none; color: inherit; cursor: pointer; font-size: 15px; line-height: 1;
+}
+.k-chip__x:hover { color: var(--tinta); }
+.k-chip--limpiar { background: transparent; color: var(--tinta); border-color: var(--tinta); cursor: pointer; }
+.k-chip--limpiar:hover { background: var(--tinta); color: var(--papel); }
+
+/* Rejilla: la columna estira la card a igual altura; al filtrar se oculta */
+.k-prod[hidden] { display: none; }
+.k-prod .k-card { height: 100%; display: flex; flex-direction: column; }
+.k-cat-info {
+  display: flex; flex-direction: column; gap: var(--e-2);
+  flex: 1;
+  padding: var(--e-3) var(--e-4) var(--e-4);
+  border-top: var(--borde);
+  color: var(--negro);
+}
+/* Tags en UNA sola linea con scroll horizontal si no caben (peticion) */
+.k-cat-info .k-tags {
+  flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden;
+  margin-bottom: 0; padding-bottom: 2px;
+  scrollbar-width: none;
+}
+.k-cat-info .k-tags::-webkit-scrollbar { display: none; }
+.k-cat-info .k-tag { flex: 0 0 auto; }
+/* Mobil: cards densas, sin lista de prendas (espacio para precio + tags chicos) */
+@media (max-width: 575px) {
+  .k-cat-info { gap: 6px; padding: 8px 10px 10px; }
+  .k-cat-info .k-card__compo,
+  .k-look__info .k-card__compo { display: none; }
+  .k-cat-info .k-tag,
+  .k-look__info .k-tag { font-size: 8px; padding: 1px 5px; letter-spacing: 0.03em; }
+  .k-card__precio-num { font-size: clamp(15px, 5vw, 20px); }
+  .k-card__precio-meta { font-size: 9px; }
+  .k-card__precio { gap: 6px; }
+}
+/* Lista de prendas: maximo 2 lineas con puntos suspensivos (.k-card__compo ya
+   recorta a 2 lineas); como enlace, al pulsar lleva a la pagina del look. */
+a.k-card__compo { cursor: pointer; }
+a.k-card__compo:hover { color: var(--rojo); }
+/* enlace "ver anatomia": empuja al pie de la card para alinear todas */
+.k-cat-ver {
+  margin-top: auto;
+  display: inline-flex; align-items: center; gap: var(--e-1);
+  font-family: var(--fuente-mono); font-size: var(--t-mono); font-weight: 700;
+  text-transform: uppercase; letter-spacing: var(--ls-mono);
+}
+.k-cat-ver:hover { color: var(--rojo); }
+.k-cat-ver svg { transition: transform var(--d-corta) var(--ease); }
+.k-cat-ver:hover svg { transform: translateX(3px); }
+/* estado sin resultados */
+.k-cat-vacio { text-align: center; color: var(--muted); padding-block: var(--e-8); }
+
+/* Paginacion (imitacion de un catalogo grande, sin navegacion real) */
+.k-pagina {
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
+  gap: var(--e-2); margin-top: var(--e-7);
+}
+.k-pagina__b {
+  min-width: 38px; height: 38px; padding: 0 var(--e-2);
+  display: grid; place-items: center;
+  border: var(--borde); background: var(--blanco); color: var(--tinta);
+  font-family: var(--fuente-mono); font-size: var(--t-mono); font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--d-corta) var(--ease), background var(--d-corta) var(--ease), color var(--d-corta) var(--ease);
+}
+.k-pagina__b:hover:not(:disabled) { transform: translate(-2px, -2px); background: var(--tinta); color: var(--papel); }
+.k-pagina__b:disabled { opacity: 0.4; cursor: not-allowed; }
+.k-pagina__b.is-activa { background: var(--rojo); border-color: var(--rojo); color: var(--rojo-tinta); }
+.k-pagina__sep { color: var(--muted); font-family: var(--fuente-mono); padding-inline: var(--e-1); }
+
+/* -- 6.25 Detalle del look ("shop the look"): galeria + pedido + desglose --
+   Reutiliza .k-linea (6.13), .k-card + acciones inyectadas (6.5/6.14) y
+   .k-cat-info (6.24) para los looks similares. La foto grande la cambia
+   js/principal.js (iniciarDetalle) al pulsar las miniaturas del pedido. */
+
+/* Galeria: visor (foto grande + flechas + dots) + tira de miniaturas.
+   El visor mantiene la proporcion 3/4, pero su altura se topa a 64vh para
+   que el conjunto (foto + miniaturas) entre en la ventana sin scroll. */
+.k-galeria { margin: 0; }
+.k-galeria__visor {
+  position: relative;
+  /* width derivada de la altura, manteniendo la proporcion 3/4 sin recortes
+     horizontales. (100vh - 180px) deja sitio para masthead + miniaturas;
+     multiplicado por 0.75 da el ancho que mantiene la altura dentro del viewport. */
+  width: min(100%, calc((100vh - 180px) * 0.75), 640px);
+  aspect-ratio: 3 / 4;
+  margin-inline: auto;
+  background: var(--surface);
+  border: var(--borde);
+  box-shadow: var(--sombra-dura);
+  overflow: hidden;
+}
+.k-galeria__grande {
+  display: block;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  background: var(--surface);
+}
+.k-galeria__flecha {
+  position: absolute; top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 42px; height: 42px;
+  display: grid; place-items: center;
+  background: var(--blanco); color: var(--tinta);
+  border: var(--borde);
+  box-shadow: var(--sombra-dura);
+  cursor: pointer;
+  transition: transform var(--d-corta) var(--ease),
+              color var(--d-corta) var(--ease),
+              box-shadow var(--d-corta) var(--ease);
+}
+.k-galeria__flecha:hover,
+.k-galeria__flecha:focus-visible {
+  color: var(--rojo);
+  transform: translateY(-50%) translate(-2px, -2px);
+  box-shadow: 9px 9px 0 var(--tinta);
+}
+.k-galeria__flecha[hidden] { display: none; }
+.k-galeria__flecha--prev { left: var(--e-3); }
+.k-galeria__flecha--next { right: var(--e-3); }
+.k-galeria__dots {
+  position: absolute; left: 50%; bottom: var(--e-3);
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex; gap: 8px;
+}
+.k-galeria__dots[hidden] { display: none; }
+.k-galeria__dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(20, 18, 16, 0.55);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  padding: 0; cursor: pointer;
+  transition: background var(--d-corta) var(--ease), transform var(--d-corta) var(--ease);
+}
+.k-galeria__dot:hover { background: #fff; }
+.k-galeria__dot.is-activa { background: var(--rojo); border-color: var(--rojo); transform: scale(1.3); }
+
+/* Panel derecho: resumen del look, tags, lista-pedido y CTA */
+.k-detalle-panel { display: flex; flex-direction: column; gap: var(--e-4); }
+.k-detalle-precio {
+  font-family: var(--fuente-display); font-weight: 800; font-stretch: 115%;
+  text-transform: uppercase; font-size: var(--t-h2); line-height: 1; margin: 0;
+}
+.k-detalle-meta { margin: 0; }   /* "5 piezas · 3 tiendas · un solo pedido" */
+
+/* Fila de pedido (reutiliza .k-linea): casilla de pago + mini foto que cambia
+   la foto grande + nombre/tienda/talla + precio. */
+.k-pedido { gap: 12px; align-items: flex-start; padding: 14px 0; }
+.k-pedido__check {
+  width: 20px; height: 20px; flex: 0 0 auto;
+  margin-top: 4px;   /* alinear con el titulo, no con el centro */
+  accent-color: var(--rojo); cursor: pointer;
+}
+.k-pedido__mini {
+  flex: 0 0 auto; width: 60px; height: 80px; padding: 0;
+  border: var(--borde-fino); background: var(--surface); cursor: pointer;
+  outline: 2px solid transparent; outline-offset: 1px;
+  transition: outline-color var(--d-corta) var(--ease);
+}
+.k-pedido__mini img { width: 100%; height: 100%; object-fit: cover; border: 0; }
+.k-pedido__mini.is-activa { outline-color: var(--rojo); }
+/* Info: columna izquierda, todo alineado al margen, tipografia consistente */
+.k-pedido .k-linea__info {
+  display: flex; flex-direction: column; gap: 4px;
+  align-items: flex-start; text-align: left;
+  min-width: 0; flex: 1;
+}
+.k-pedido .k-linea__info .k-card-titulo {
+  font-family: var(--fuente-display); font-weight: 800; font-stretch: 115%;
+  text-transform: uppercase;
+  font-size: 14px; line-height: 1.1;
+  margin: 0;
+}
+.k-pedido .k-linea__info p.k-mono { margin: 0; font-size: 10px; }
+.k-pedido__talla {
+  margin-top: 4px; align-self: flex-start;
+  font-family: var(--fuente-mono); font-size: var(--t-mono);
+  text-transform: uppercase; letter-spacing: var(--ls-mono);
+  padding: 2px var(--e-2); border: var(--borde-fino); border-radius: var(--radio);
+  background: var(--blanco); color: var(--tinta); cursor: pointer;
+}
+.k-pedido__precio {
+  font-family: var(--fuente-display); font-weight: 800; font-stretch: 115%;
+  font-size: 16px; line-height: 1;
+  white-space: nowrap;
+  margin-top: 4px;   /* alinear con el titulo */
+  color: var(--tinta);
+}
+/* fila final "look completo": separada arriba, sin linea inferior */
+.k-pedido--todo { border-top: var(--borde); border-bottom: 0; margin-top: var(--e-2); padding-top: var(--e-4); }
+
+/* Desglose por elemento: tarjetas cuadradas (como tendencias) con acciones
+   inyectadas (like/guardar/cesta). Reutiliza .k-card pero la foto es 1/1 y la
+   ficha solo muestra nombre + precio (sin tags, peticion). */
+.k-card--cuad .k-card__media { aspect-ratio: 1 / 1; }
+.k-pieza .k-card { height: 100%; display: flex; flex-direction: column; }
+/* Mismo formato que las cards de look en movil: todo a la izquierda, columna */
+.k-pieza__cuerpo {
+  display: flex; flex-direction: column;
+  align-items: flex-start; text-align: left;
+  gap: 4px;
+  padding: 10px 12px 12px;
+  border-top: var(--borde);
+  color: var(--negro);
+}
+.k-pieza__nombre {
+  display: flex; flex-direction: column; gap: 2px;
+  font-family: var(--fuente-display); font-weight: 800; font-stretch: 115%;
+  text-transform: uppercase; line-height: 1.1;
+  font-size: clamp(13px, 1.5vw, 15px);
+}
+.k-pieza__tienda {
+  font-family: var(--fuente-mono); font-weight: 400;
+  font-size: 10px; text-transform: uppercase; letter-spacing: var(--ls-mono);
+  color: var(--muted);
+}
+.k-pieza__precio {
+  font-family: var(--fuente-display); font-weight: 800; font-stretch: 115%;
+  font-size: clamp(16px, 2.5vw, 20px); line-height: 1;
+  color: var(--tinta);
+  white-space: nowrap;
+  margin-top: 2px;
+}
+@media (max-width: 575px) {
+  .k-pieza__cuerpo { padding: 8px 10px 10px; gap: 3px; }
+  .k-pieza__nombre { font-size: 12px; }
+  .k-pieza__tienda { font-size: 9px; }
+  .k-pieza__precio { font-size: 15px; }
+}
+
+/* Tag que coincide con el look actual: resaltado en rojo (looks similares) */
+.k-tag--match { background: var(--rojo); color: var(--rojo-tinta); border-color: var(--rojo); }
+
+/* ==========================================================================
+   6.23 ADAPTIVE - reglas de la version movil (<992px)
+   ========================================================================== */
+@media (max-width: 991.98px) {
+  /* -- Centrado global de textos y contenido -- */
+  main .row { text-align: center; }
+  .k-medida, .k-centrado { margin-inline: auto; }
+  main .k-portada .d-flex.flex-wrap,
+  main .d-grid { justify-content: center; }
+
+  /* -- Botones a ancho completo (incluido el del bloque Caracteristicas) -- */
+  main .k-btn { width: 100%; justify-content: center; }
+
+  /* -- Hero: titulo muy grande (peso visual principal). El eje expandido se
+     baja a 100% en movil: asi "COMPLETO" entra completo en 320/375 sin cortarse
+     pero el titulo sigue siendo grande. -- */
+  .k-hero { font-size: clamp(34px, 13vw, 58px); font-stretch: 100%; }
+
+  /* -- Cabecera: menu del burger centrado (logo/burger/iconos los coloca el HTML) -- */
+  .k-nav .navbar-collapse { text-align: center; }
+  .k-nav .navbar-nav { align-items: center; }
+  .k-menu-extra {
+    margin-top: var(--e-4); padding-top: var(--e-4);
+    border-top: var(--borde-fino);
+  }
+  .k-menu-tema { width: 100%; justify-content: center; }
+
+  /* -- Tendencias: flechas mas pequenas y tarjetas que entran completas -- */
+  .k-trend { gap: var(--e-3); }
+  .k-trend-nav { width: 36px; height: 36px; box-shadow: 4px 4px 0 var(--tinta); }
+  .k-trend__item { flex: 0 0 100%; }   /* la tarjeta ocupa el carril entero, no se corta */
+  .k-trend--a, .k-trend--b, .k-trend--c, .k-trend--d { transform: none; }
+}
+
+/* Footer centrado en movil (<768): logo, descripcion e iconos sociales */
+@media (max-width: 767.98px) {
+  .k-footer { text-align: center; }
+  .k-footer .k-redes { justify-content: center; }
+}
+
+/* ==========================================================================
+   7. MOTION (fade-in al hacer scroll - IntersectionObserver en js)
+   ========================================================================== */
+.k-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity var(--d-media) var(--ease),
+              transform var(--d-media) var(--ease);
+}
+.k-reveal.is-visible { opacity: 1; transform: none; }
+
+/* Respeta usuarios que reducen movimiento */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; scroll-behavior: auto !important; }
+  .k-reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ==========================================================================
+   8. DARK MODE (opcional - tokens alternos DESIGN.md)
+   ========================================================================== */
+[data-tema="oscuro"] {
+  --papel: #141210;
+  --surface: #1d1a17;
+  --tinta: #F1EFE9;
+  --muted: #9a958c;
+  --rojo: #AC2744;
+  --rojo-tinta: #141210;
+  --blanco: #262320;      /* en oscuro el "blanco" es una superficie clara legible */
+  --negro: var(--tinta);  /* en oscuro las descripciones usan la tinta clara */
+}
+[data-tema="oscuro"] .k-card__media img { filter: brightness(0.92); }
+
+
+/* ==========================================================================
+   9. CAMBIOS PARA FOTOS REALES (hover-swap, bleed con fondo, galeria detalle)
+   ========================================================================== */
+
+/* -- 9.1 Hover-swap en cards de galeria y catalogo: dos fotos apiladas,
+   la -a por defecto, la -b al pasar el raton. -- */
+.k-card__media--swap { position: relative; }
+.k-card__media--swap img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: opacity var(--d-corta) var(--ease),
+              filter var(--d-media) var(--ease),
+              transform var(--d-media) var(--ease);
+}
+.k-card__media-b { opacity: 0; }
+.k-card:hover .k-card__media--swap .k-card__media-a { opacity: 0; }
+.k-card:hover .k-card__media--swap .k-card__media-b { opacity: 1; }
+
+/* -- 9.2 Fondo del bloque "Verte bien, ahora es simple":
+   la imagen vive en el HTML (k-bleed__fondo), CSS la coloca de fondo. -- */
+.k-bleed { background: var(--tinta); }   /* fallback antes de cargar la foto */
+.k-bleed__fondo {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  filter: brightness(0.9);
+}
+.k-bleed::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.55));
+  z-index: 1;
+  pointer-events: none;
+}
+.k-bleed__cara > * { position: relative; z-index: 2; }
+.k-bleed__titulo { color: var(--papel); }   /* sobre foto: texto claro */
+
+/* -- 9.3 Galeria detalle: foto grande + tira de 5 angulos debajo -- */
+.k-galeria__angulos {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: var(--e-2);
+  margin-top: 16px;
+  width: min(100%, calc((100vh - 180px) * 0.75), 640px);
+  margin-inline: auto;
+  min-height: 84px;
+}
+/* Galeria fija al hacer scroll dentro de su columna (solo desktop) */
+@media (min-width: 992px) {
+  .k-galeria {
+    position: sticky;
+    top: 88px;
+  }
+}
+.k-galeria__ang {
+  padding: 0; background: var(--surface);
+  border: var(--borde-fino);
+  cursor: pointer;
+  outline: 2px solid transparent; outline-offset: 1px;
+  height: 84px; overflow: hidden;
+  transition: outline-color var(--d-corta) var(--ease);
+}
+.k-galeria__ang img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.k-galeria__ang.is-activa { outline-color: var(--rojo); }
+@media (max-width: 480px) {
+  .k-galeria__angulos { gap: 6px; min-height: 64px; }
+  .k-galeria__ang { height: 64px; }
+}
